@@ -1,0 +1,41 @@
+h1 {
+    font-size: 18pt;
+    color: black;
+    font-weight: hold;
+}
+
+label {
+    font-size: 14pt;
+    color: blue;
+}
+
+input {
+    margin: 2pt;
+}
+
+table{
+    border: 1pt solid;
+    width: 60%;
+}
+
+td {
+    font-family: 'Vardana';
+    font_size: 10pt;
+    color: blue;
+    text-align: center;
+    border: 1pt solid;
+    border-color: black;
+}
+
+.table-title {
+    font-family: 'Verdana';
+    font-weight: bold;
+    font-size: 12pt;
+    color: black;
+}
+
+#nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}

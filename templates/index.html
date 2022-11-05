@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom title</title>
+    <link rel="stylesheet" href="/static/main.css" type="text/css">
+</head>
+<body>
+{% if username %}
+<h1>Hello {{ username }}</h1>
+{% else %}
+<h1>Hello guest</h1>
+{% endif %}
+<div>
+    <p class="red-text">Paragraph, ok? No? Not like i care tbh</p>
+</div>
+<div>
+    <ul>
+        {% for item in array %}
+        <li> {{ item }}</li>
+        {% endfor %}
+    </ul>
+</div>
+</body>
+</html>

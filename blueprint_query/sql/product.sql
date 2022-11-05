@@ -1,0 +1,1 @@
+select * from product where prod_name='$input_product'
