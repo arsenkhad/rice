@@ -1,5 +1,5 @@
 # Разработка информационных систем (РИС)
-This repo contains my tasks on one university subject
+This is a branch for labs
 ## How to run
 You need to run app.py to start Flask server.
 Make sure you have Flask and PyMySQL packages installed
