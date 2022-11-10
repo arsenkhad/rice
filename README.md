@@ -1,7 +1,6 @@
 # Разработка информационных систем (РИС)
-This repo contains my tasks on one university subject
-## How to run
-You need to run app.py to start Flask server.
-Make sure you have Flask and PyMySQL packages installed
-Also you need to specify your database info in data_files/dbconfig.json file
-In database make sure to create all tables used in sql-requests
+This is all my tasks on Development of Information Systems (DIS) – my university subject
+## lab
+This branch contains tasks, that are same for all students
+## kurs
+This branch contains my individual tasks
