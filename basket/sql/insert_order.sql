@@ -1,2 +1,2 @@
 insert
-user_order values(NULL, '$user_id', '$order_date')
+user_order values(NULL, '$user_id', CURDATE())

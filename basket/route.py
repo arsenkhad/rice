@@ -2,7 +2,7 @@ import os
 
 from flask import Blueprint, render_template, request, current_app, session, redirect, url_for
 from db_context_manager import DBContextManager
-from access import group_required
+from access import external_required
 from db_work import select_dict, insert
 from sql_provider import SQLProvider
 
@@ -13,6 +13,7 @@ provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
 
 
 @blueprint_order.route('/', methods=['GET', 'POST'])
+@external_required
 def order_index():
 	db_config = current_app.config['db_config']
 
@@ -29,6 +30,7 @@ def order_index():
 		add_to_basket(prod_id, items)
 
 		return redirect(url_for('bp_order.order_index'))
+
 
 def add_to_basket(prod_id: str, items:dict):
 	item_description = [item for item in items if str(item['prod_id']) == str(prod_id)]
@@ -48,7 +50,8 @@ def add_to_basket(prod_id: str, items:dict):
 	return True
 
 
-@blueprint_order.route('/save_order', methods=['GET','POST'])
+@blueprint_order.route('/save_order', methods=['GET', 'POST'])
+@external_required
 def save_order():
 	user_id = session.get('user_id')
 	current_basket = session.get('basket', {})
@@ -65,7 +68,7 @@ def save_order_with_list(dbconfig: dict, user_id: int, current_basket: dict):
 	with DBContextManager(dbconfig) as cursor:
 		if cursor is None:
 			raise ValueError('Курсор не создан')
-		_sql1 = provider.get('insert_order.sql', user_id=user_id, order_date='2022/11/01')
+		_sql1 = provider.get('insert_order.sql', user_id=user_id)
 		print(_sql1)
 		result1 = cursor.execute(_sql1)
 		if result1 == 1:

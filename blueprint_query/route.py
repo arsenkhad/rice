@@ -1,6 +1,7 @@
 import os
 
 from flask import Blueprint, request, render_template, current_app
+from access import group_required
 from db_work import select
 from sql_provider import SQLProvider
 
@@ -19,6 +20,7 @@ def provider_test():
 
 
 @blueprint_query.route('/queries', methods=['GET', 'POST'])
+@group_required
 def queries():
     if request.method == 'GET':
         return render_template('product_form.html')
