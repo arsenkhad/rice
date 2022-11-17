@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+    <link type="text/css" rel="stylesheet" href="static/main.css">
+</head>
+<body>
+<div>
+    <h1 align="center">Меню отчётов</h1>
+    <p align="center">
+        <a href="{{ url_for('bp_report.start_page1') }}">Отчёт 1</a><br><br>
+        <a href="{{ url_for('bp_report.start_page2') }}">Отчёт 2</a><br><br>
+        <a href="{{ url_for('menu_choice') }}">Вернуться в главное меню</a>
+    </p>
+</div>
+</body>
+</html>

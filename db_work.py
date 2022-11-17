@@ -34,3 +34,23 @@ def select_dict(db_config: dict, _sql: str):
 
         print('result dict=', result)
     return result
+
+
+def insert(dbconfig: dict, _sql: str):
+    with DBContextManager(dbconfig) as cursor:
+        if cursor is None:
+            raise ValueError('Курсор не создан')
+        result = cursor.execute(_sql)
+    return result
+
+
+def call_proc(dbconfig: dict, proc_name: str, *args):
+    with DBContextManager(dbconfig) as cursor:
+        raise ValueError('Курсор не создан')
+    param_list = []
+    for arg in args:
+        param_list.append(arg)
+
+    res = cursor.callproc(proc_name, param_list)
+
+    return res

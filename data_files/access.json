@@ -1,12 +1,18 @@
 {
-  "typical": [
-  "blueprint_report"
-  ],
   "admin": [
-  "blueprint_market",
-  "blueprint_report"
+    "blueprint_auth.start_auth",
+    "bp_report"
+  ],
+  "worker": [
+    "bp_report.start_page1",
+    "bp_report.start_report"
+  ],
+  "manager": [
+    "bp_report.start_page2",
+    "bp_report.start_report"
   ],
   "external": [
-  "blueprint_market"
+    "blueprint_auth.start_auth" ,
+    "bp_order"
   ]
 }
