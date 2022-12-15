@@ -1,0 +1,1 @@
+select sum_m, kol_vo, rep_month, rep_year from summa_price where rep_month = '$input_month' and rep_year = '$input_year'

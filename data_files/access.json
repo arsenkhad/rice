@@ -1,18 +1,17 @@
 {
   "admin": [
-    "blueprint_auth.start_auth",
-    "bp_report"
+    "bp_report",
+    "bp_query"
   ],
   "worker": [
-    "bp_report.start_page1",
+    "bp_report.view_rep1",
     "bp_report.start_report"
   ],
   "manager": [
-    "bp_report.start_page2",
+    "bp_report.create_rep1",
     "bp_report.start_report"
   ],
   "external": [
-    "blueprint_auth.start_auth" ,
     "bp_order"
   ]
 }

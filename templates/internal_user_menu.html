@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% block external_user %}
     <p align="center">
-        <a href="#">Создание отчётов</a> <br><br>
-        <a href="{{ url_for("bp_report.start_report") }}">Просмотр отчётов</a> <br><br>
+        {% if session.get('user_group', None) == 'admin'%}
+        <a href="{{ url_for('bp_query.queries')}}">Начать запросы</a> <br><br>
+        {% endif %}
+        <a href="{{ url_for('bp_report.start_report')}}">К отчетам</a> <br><br>
         <a href="/exit"> Нажмите для выхода из системы</a>
     </p>
 {% endblock %}

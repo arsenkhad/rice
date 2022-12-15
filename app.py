@@ -15,6 +15,8 @@ app.register_blueprint(blueprint_query, url_prefix='/query')
 
 app.config['db_config'] = json.load(open('data_files/dbconfig.json'))
 app.config['access_config'] = json.load(open('data_files/access.json'))
+app.config['report_url'] = json.load(open('data_files/report_url.json'))
+app.config['report_list'] = json.load(open('data_files/report_list.json', encoding='UTF-8'))
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -32,7 +34,7 @@ def menu_choice():
 @app.route('/exit')
 def exit_func():
     session.clear()
-    return "До свидания, заходите к нам ещё!"
+    return render_template('exit.html')
 
 
 if __name__ == '__main__':

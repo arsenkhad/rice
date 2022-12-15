@@ -1,18 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Menu</title>
-    <link type="text/css" rel="stylesheet" href="static/main.css">
+    <title>Title</title>
+        <link type="text/css" rel="stylesheet" href="/static/design_list.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 </head>
 <body>
-<div>
-    <h1 align="center">Меню отчётов</h1>
-    <p align="center">
-        <a href="{{ url_for('bp_report.start_page1') }}">Отчёт 1</a><br><br>
-        <a href="{{ url_for('bp_report.start_page2') }}">Отчёт 2</a><br><br>
-        <a href="{{ url_for('menu_choice') }}">Вернуться в главное меню</a>
-    </p>
-</div>
+    <h2 align = center>Меню работы с отчетами</h2><br><br>
+    <center>
+        {% for report in report_list %}
+            <form action='' method = 'POST'>
+                <label for="create_rep" class="named_list">{{report['rep_name']}}</label>
+                {% if session.get('user_group', None) in ['admin', 'manager']%}
+                    <input type=submit name=create_rep id=create_rep value="Создать">
+                {% endif %}
+                {% if session.get('user_group', None) in ['admin', 'worker']%}
+                    <input type="submit" name="view_rep" value="Смотреть">
+                {% endif %}
+                <input type="hidden" name="rep_id" value={{report['rep_id']}}>
+            </form>
+        {% endfor %}
+            <br><br><br><br><br><br><br><br><br><br>
+            <a href="{{url_for('menu_choice')}}"> Возврат в главное меню </a> <br><br>
+    </center>
 </body>
 </html>
