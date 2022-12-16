@@ -1,0 +1,12 @@
+ {
+    "1": {
+        "create_rep":"bp_report.create_rep1",
+        "view_rep": "bp_report.view_rep1",
+        "delete_rep": "bp_report.delete_rep1"
+    },
+    "2": {
+        "create_rep":"bp_report.create_rep2",
+        "view_rep": "bp_report.view_rep2",
+        "delete_rep": "bp_report.delete_rep2"
+    }
+}

@@ -1,12 +1,17 @@
 {
-  "typical": [
-  "blueprint_report"
-  ],
   "admin": [
-  "blueprint_market",
-  "blueprint_report"
+    "bp_report",
+    "bp_query"
+  ],
+  "worker": [
+    "bp_report.view_rep1",
+    "bp_report.start_report"
+  ],
+  "manager": [
+    "bp_report.create_rep1",
+    "bp_report.start_report"
   ],
   "external": [
-  "blueprint_market"
+    "bp_query.bill_info"
   ]
 }

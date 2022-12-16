@@ -32,5 +32,28 @@ def select_dict(db_config: dict, _sql: str):
         for row in cursor.fetchall():
             result.append(dict(zip(schema, row)))
 
-        print('result dict=', result)
+        print('result dict:', '', ' '.join([f'{j:12}' for j in result[0]]),
+              *[' '.join([f'{str(i[j]):12}' for j in i]) for i in result], sep='\n')
     return result
+
+
+def insert(dbconfig: dict, _sql: str):
+    with DBContextManager(dbconfig) as cursor:
+        if cursor is None:
+            raise ValueError('Курсор не создан')
+        result = cursor.execute(_sql)
+    return result
+
+
+def call_proc(dbconfig: dict, proc_name: str, *args):
+    with DBContextManager(dbconfig) as cursor:
+        if cursor is None:
+            raise ValueError('Курсор не создан')
+        param_list = []
+        for arg in args:
+            print
+            param_list.append(arg)
+
+        res = cursor.callproc(proc_name, param_list)
+
+        return res
