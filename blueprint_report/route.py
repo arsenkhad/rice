@@ -90,7 +90,7 @@ def delete_rep1():
             _sql = provider.get('check_for_report.sql', input_year=input_year, input_month=input_month)
             info_result = select_dict(current_app.config['db_config'], _sql)
             if len(info_result) == 0:
-                return render_template('delete_null.html')
+                return render_template('report_delete_null.html')
             else:
                 _sql = provider.get('delete.sql', input_month=input_month, input_year=input_year)
                 insert(current_app.config['db_config'], _sql)
