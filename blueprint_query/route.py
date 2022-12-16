@@ -10,15 +10,6 @@ blueprint_query = Blueprint('bp_query', __name__, template_folder='templates')
 provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
 
 
-@blueprint_query.route('/test')
-def provider_test():
-    p = os.path
-    print(p)
-    p1 = os.path.dirname(__file__)
-    print(p1)
-    return 'done'
-
-
 @blueprint_query.route('/queries', methods=['GET', 'POST'])
 @group_required
 def queries():
