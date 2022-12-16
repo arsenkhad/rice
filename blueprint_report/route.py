@@ -1,6 +1,6 @@
 import os
 from flask import render_template, request, Blueprint, redirect, url_for, current_app
-from db_work import call_proc, select, select_dict
+from db_work import call_proc, select, select_dict, insert
 from sql_provider import SQLProvider
 from access import group_required
 
@@ -19,6 +19,8 @@ def start_report():
         rep_id = request.form.get('rep_id')
         if request.form.get('create_rep'):
             url_rep = report_url[rep_id]['create_rep']
+        elif request.form.get('delete_rep'):
+            url_rep = report_url[rep_id]['delete_rep']
         else:
             url_rep = report_url[rep_id]['view_rep']
         return redirect(url_for(url_rep))
@@ -72,5 +74,26 @@ def view_rep1():
                 else:
                     list_name=['Сумма', 'Количество проданных товаров', 'Месяц создания отчета', 'Год создания отчета']
                     return render_template('result_1.html', schema=list_name, result=product_result)
+        else:
+            return render_template('report_create.html', message='Повторите ввод')
+
+
+@blueprint_report.route('/delete_rep/1', methods=['GET', 'POST'])
+@group_required
+def delete_rep1():
+    if request.method == 'GET':
+        return render_template('report_create.html')
+    else:
+        input_year = request.form.get('input_year')
+        input_month = request.form.get('input_month')
+        if input_year and input_month:
+            _sql = provider.get('check_for_report.sql', input_year=input_year, input_month=input_month)
+            info_result = select_dict(current_app.config['db_config'], _sql)
+            if len(info_result) == 0:
+                return render_template('delete_null.html')
+            else:
+                _sql = provider.get('delete.sql', input_month=input_month, input_year=input_year)
+                insert(current_app.config['db_config'], _sql)
+                return render_template('report_deleted.html')
         else:
             return render_template('report_create.html', message='Повторите ввод')

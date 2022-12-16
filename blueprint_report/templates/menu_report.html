@@ -18,6 +18,9 @@
                 {% if session.get('user_group', None) in ['admin', 'worker']%}
                     <input type="submit" name="view_rep" value="Смотреть">
                 {% endif %}
+                {% if session.get('user_group', None) in ['admin']%}
+                <input type="submit" name="delete_rep" id="delete_rep" value="Удалить">
+                {% endif %}
                 <input type="hidden" name="rep_id" value={{report['rep_id']}}>
             </form>
         {% endfor %}
