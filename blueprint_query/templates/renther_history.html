@@ -1,12 +1,14 @@
 {% extends 'renther_menu.html' %}
-{% block bb_info %}
-<table border= 1 width=80%>
+{% block renther_bb %}
+    {% for order in orders%}
+    <div>Заказ от {{order[1]}} на сумму {{order[2]}}:</div> <br>
+    <table border= 1 width=80%>
         <tr>
             {% for column in schema%}
                 <td class=border align="center">{{column}}</td>
             {% endfor %}
         </tr>
-        {% for line in result %}
+        {% for line in lines[loop.index0] %}
         <tr>
             {% for column in line %}
             <td align="center"> {{column}}</td>
@@ -14,4 +16,6 @@
         </tr>
         {% endfor %}
     </table>
+    <br>
+    {% endfor %}
 {% endblock %}

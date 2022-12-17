@@ -12,6 +12,6 @@
     "bp_report.start_report"
   ],
   "external": [
-    "bp_query.bill_info"
+    "bp_query.renther_history"
   ]
 }

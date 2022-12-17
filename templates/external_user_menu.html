@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block external_user %}
     <p align="center">
-        <a href="{{ url_for('bp_query.bill_info') }}">Просмотр информации о билборде</a> <br><br>
+        <a href="{{ url_for('bp_query.renther_history') }}">История заказов</a> <br><br>
+        <a href="#">Сделать новый заказ</a> <br><br>
+        <a href="#">Информация о биллборде</a> <br><br>
         <a href="/exit"> Нажмите для выхода из системы</a>
     </p>
 {% endblock %}

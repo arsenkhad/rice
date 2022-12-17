@@ -1,0 +1,1 @@
+select contract_num from external_user where user_id = '$input_user'
