@@ -14,20 +14,26 @@ provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
 @group_required
 def bill_orders():
     if request.method == 'GET':
-        return render_template('billboard_orders.html')
+        return render_template('request.html', rq_line="ID билборда", rq_placeholder="ID")
     else:
-        input_product = request.form.get('product_name')
-        if input_product:
-            _sql = provider.get('billboard_orders.sql', input_product=input_product)
-            product_result, schema = select(current_app.config['db_config'], _sql)
-            return render_template('db_result.html', schema=schema, result=product_result)
+        input_id = request.form.get('input_get')
+        if input_id:
+            _sql = provider.get('billboard_orders.sql', input_id=input_id)
+            orders, schema = select(current_app.config['db_config'], _sql)
+            if len(orders):
+                return render_template('table.html', schema=schema, result=orders, render=True)
+            _sql = provider.get('billboard_info.sql', input_id=input_id)
+            bb_info, _ = select(current_app.config['db_config'], _sql)
+            if len(bb_info):
+                return render_template('renther_menu.html', messages=['На этот биллборд нет заказов'])
+            return render_template('renther_menu.html', messages=['Такого биллборда нет'])
         else:
-            return 'repeat input'
+            return render_template('request.html', message='Повторите ввод')
 
 
 @blueprint_query.route('/renther_history', methods=['GET', 'POST'])
 @external_required
-def renther_history():
+def renther_history(user_id=None):
     _sql = provider.get('get_contract.sql', input_user=session['user_id'])
     result = select(current_app.config['db_config'], _sql)[0][0][0]
     if result:
@@ -51,12 +57,14 @@ def renther_history():
 @external_required
 def bill_info():
     if request.method == 'GET':
-        return render_template('request_bb_info.html')
+        return render_template('request.html', rq_line="ID биллборда", rq_placeholder="ID")
     else:
-        input_product = request.form.get('product_name')
-        if input_product:
-            _sql = provider.get('billboard_info.sql', input_product=input_product)
-            product_result, schema = select(current_app.config['db_config'], _sql)
-            return render_template('db_result.html', schema=schema, result=product_result)
+        input_id = request.form.get('input_get')
+        if input_id:
+            _sql = provider.get('billboard_info.sql', input_id=input_id)
+            bb_info, schema = select(current_app.config['db_config'], _sql)
+            if bb_info:
+                return render_template('table.html', schema=schema, result=bb_info, render=True)
+            return render_template('renther_menu.html', messages=['Такого биллборда нет'])
         else:
-            return 'repeat input'
+            return render_template('request.html', message='Повторите ввод')

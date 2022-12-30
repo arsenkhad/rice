@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Список заказов</title>
+    <title>Поиск билборда</title>
     <style type="test/css">
         h2 {
             font-size: 14pt;
@@ -15,14 +15,16 @@
     </style>
 </head>
 <body>
-<h2 align="center">Список заказов с выбранным билбордом</h2>
+<h2 align="center">Ввод данных</h2>
 <div align="center">
     <form action="" method="POST">
-        <label for="product">Введите адрес билборда</label>
-        <input name="product_name" id="product" type="text" placeholder="адрес">
+        <label for="input_line">Введите {{rq_line}}</label>
+        <input name="input_get" id="input_line" type="text" placeholder={{rq_placeholder}}>
         <br><br>
         <input type="submit" value="Отправить">
     </form>
+    <br><br>
+    <h2 align="center">{{ message }}</h2>
 </div>
 </body>
 </html>

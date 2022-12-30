@@ -1,6 +1,5 @@
-{% extends 'renther_menu.html' %}
-{% block bb_info %}
-<table border= 1 width=80%>
+{% macro out_table(schema, result) %}
+    <table border= 1 width=80%>
         <tr>
             {% for column in schema%}
                 <td class=border align="center">{{column}}</td>
@@ -14,4 +13,11 @@
         </tr>
         {% endfor %}
     </table>
-{% endblock %}
+{% endmacro %}
+
+{% if render%}
+    {% extends 'renther_menu.html' %}
+    {% block bb_info %}
+        {{table.out_table(schema, result)}}
+    {% endblock %}
+{%endif%}

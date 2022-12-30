@@ -6,10 +6,11 @@
     <link type="text/css" rel="stylesheet" href="static/main.css">
 </head>
 <body>
-<div>
-    <h1 align="center"> Вам доступны следующие действия</h1>
+<div align="center">
+    <h1> Вам доступны следующие действия</h1>
     {% block internal_user %}{% endblock %}
     {% block external_user %}{% endblock %}
+    <a href="/exit"> Нажмите для выхода из системы</a>
 </div>
 </body>
 </html>

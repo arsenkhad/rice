@@ -2,20 +2,6 @@
 {% block renther_bb %}
     {% for order in orders%}
     <div>Заказ от {{order[1]}} на сумму {{order[2]}}:</div> <br>
-    <table border= 1 width=80%>
-        <tr>
-            {% for column in schema%}
-                <td class=border align="center">{{column}}</td>
-            {% endfor %}
-        </tr>
-        {% for line in lines[loop.index0] %}
-        <tr>
-            {% for column in line %}
-            <td align="center"> {{column}}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
-    <br>
+    {{table.out_table(schema, lines[loop.index0])}} <br>
     {% endfor %}
 {% endblock %}
