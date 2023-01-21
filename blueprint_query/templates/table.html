@@ -15,9 +15,9 @@
     </table>
 {% endmacro %}
 
-{% if render%}
+{% if render %}
     {% extends 'renther_menu.html' %}
     {% block bb_info %}
         {{table.out_table(schema, result)}}
     {% endblock %}
-{%endif%}
+{% endif %}

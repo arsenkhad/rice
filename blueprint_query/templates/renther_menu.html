@@ -5,7 +5,11 @@
     <title>Queries menu</title>
 </head>
 <body>
-    <h1 align="center">Пум-пум-пум</h1><br><br>
+    <h1 align="center">Пум-пум-пум</h1><br>
+    {% for message in pre_messages %}
+        <div class="info">{{message}}</div>
+    {% endfor %}
+    <br>
     <center>
         {% import 'table.html' as table %}
         {% block renther_bb %}{% endblock %}
