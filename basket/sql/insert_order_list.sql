@@ -1,2 +1,2 @@
 insert
-order_list values(NULL, '$order_id', '$prod_id', '$prod_amount')
+order_line values(NULL, '$start_mon', '$start_year', '$rent_len', NULL, '$order_id', '$bb_id')

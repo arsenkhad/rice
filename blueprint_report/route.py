@@ -8,6 +8,8 @@ blueprint_report = Blueprint('bp_report', __name__, template_folder='templates')
 provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
 
 
+# У workerа календарик из месяцев, в котором отображается какой бб арендован в текущем
+# У менеджера отчет именно о заказах!!!
 @blueprint_report.route('/', methods=['GET', 'POST'])
 @group_required
 def start_report():
