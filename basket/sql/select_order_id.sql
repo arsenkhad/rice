@@ -1,3 +1,3 @@
-select max(order_id) as max_id
-from user_order
-where user_id = '$user_id'
+select max(o_id) as max_id
+from order_
+where contract_num = '$contract_num'

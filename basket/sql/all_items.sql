@@ -1,2 +1,2 @@
-select prod_id, prod_name, prod_price
-from product
+select b_id, b_cost, b_size, b_adress
+from billboards

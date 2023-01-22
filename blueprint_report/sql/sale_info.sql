@@ -1,0 +1,1 @@
+select * from order_ where year(o_date) = '$input_year' and month(o_date) = '$input_month'
