@@ -14,6 +14,7 @@
   "external": [
     "bp_query.renther_history",
     "bp_query.get_orders",
-    "bp_query.bill_info"
+    "bp_query.bill_info",
+    "bp_order"
   ]
 }

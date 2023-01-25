@@ -15,7 +15,6 @@ provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
 def start_report():
     report_url = current_app.config['report_url']
     report_list = current_app.config['report_list']
-    report_mode = ['create_rep', 'view_rep', 'delete_rep']
     if request.method == 'GET':
         return render_template('menu_report.html', report_list=report_list, endcoding='UTF-8')
     else:
@@ -38,17 +37,17 @@ def create_rep1():
         input_year = request.form.get('input_year')
         input_month = request.form.get('input_month')
         if input_year and input_month:
-            _sql = provider.get('info_of_sale.sql', input_year=input_year, input_month=input_month)
+            _sql = provider.get('sale_info.sql', input_year=input_year, input_month=input_month)
             info_result = select_dict(current_app.config['db_config'], _sql)
             if len(info_result) == 0:
                 return render_template('report_log.html', message='Продаж в этом месяце не было')
             else:
-                _sql = provider.get('summa_price.sql', input_month=input_month, input_year=input_year)
-                product_result = select_dict(current_app.config['db_config'], _sql)
-                if len(product_result) != 0:
+                _sql = provider.get('rent_reports.sql', input_month=input_month, input_year=input_year)
+                report_result = select_dict(current_app.config['db_config'], _sql)
+                if len(report_result) != 0 and report_result[0]['temp'] == 0:
                     return render_template('report_log.html', message='Отчет уже существует')
                 else:
-                    res = call_proc(current_app.config['db_config'], 'summ', int(input_month), int(input_year))
+                    res = call_proc(current_app.config['db_config'], 'rep_sum', int(input_month), int(input_year))
                     print('res = ', res)
                     return render_template('report_log.html', message='Отчет создан')
         else:
@@ -64,19 +63,19 @@ def view_rep1():
         input_year = request.form.get('input_year')
         input_month = request.form.get('input_month')
         if input_year and input_month:
-            _sql = provider.get('info_of_sale.sql', input_year=input_year, input_month=input_month)
+            _sql = provider.get('sale_info.sql', input_year=input_year, input_month=input_month)
             info_result = select_dict(current_app.config['db_config'], _sql)
             if len(info_result) == 0:
                 return render_template('report_log.html', message='Продаж в этом месяце не было')
             else:
-                _sql = provider.get('summa_price.sql', input_month=input_month, input_year=input_year)
-                product_result, schema = select(current_app.config['db_config'], _sql)
+                _sql = provider.get('rent_reports.sql', input_month=input_month, input_year=input_year)
+                report_result, schema = select(current_app.config['db_config'], _sql)
 
-                if len(product_result) == 0:
-                    return render_template('report_log.html', message='Перед просмотром отчета требуется его создать')
+                if len(report_result) == 0:
+                    return render_template('report_log.html', message='Такого отчёта пока не существует.')
                 else:
-                    list_name=['Сумма', 'Количество проданных товаров', 'Месяц создания отчета', 'Год создания отчета']
-                    return render_template('result_1.html', schema=list_name, result=product_result)
+                    list_name=['Количество арендованных биллбордов', 'Сумма', 'Месяц создания отчета', 'Год создания отчета']
+                    return render_template('result_1.html', schema=list_name, result=report_result)
         else:
             return render_template('report_create.html', error_message='Повторите ввод')
 
@@ -90,7 +89,7 @@ def delete_rep1():
         input_year = request.form.get('input_year')
         input_month = request.form.get('input_month')
         if input_year and input_month:
-            _sql = provider.get('check_for_report.sql', input_year=input_year, input_month=input_month)
+            _sql = provider.get('rent_reports.sql', input_year=input_year, input_month=input_month)
             info_result = select_dict(current_app.config['db_config'], _sql)
             if len(info_result) == 0:
                 return render_template('report_log.html', message='Отчёта на этот месяц еще нет')

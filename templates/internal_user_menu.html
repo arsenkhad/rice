@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block external_user %}
         <a href="{{ url_for('bp_query.bill_orders') }}">Просмотр заказов аренды в текущем месяце</a> <br><br>
-        <a href="{{ url_for('bp_query.renther_history_all') }}">История заказов</a> <br><br>
+        <a href="{{ url_for('bp_query.renther_history_all') }}">История заказов арендатора</a> <br><br>
         <a href="#">Просмотр арендаторов</a> <br><br>
-        <a href="#">Просмотр арендаторов</a> <br><br>
+        <a href="{{ url_for('bp_report.start_report') }}">Отчёты</a> <br><br>
 {% endblock %}

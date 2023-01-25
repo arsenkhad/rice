@@ -22,7 +22,7 @@
         <h2>Все товары</h2>
         {% if items %}
         {% for item in items %}
-            {{ utils.render_item(item, show_form = True, show_amount = False) }}
+            {{ utils.render_item(item, show_form = True) }}
         {% endfor %}
         {% else %}
             <p> Нет доступных товаров</p>
@@ -33,7 +33,7 @@
         <a style='' href="{{url_for('bp_order.clear_basket')}}">Очистить корзину</a>
         {% if basket %}
         {% for key in basket %}
-            {{ utils.render_item(basket[key], show_form = False, show_amount = True) }}
+            {{ utils.render_item(basket[key], show_period = True) }}
         {% endfor %}
         {% else %}
             <p>Ваша корзина пуста</p>

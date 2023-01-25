@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block external_user %}
         <a href="{{ url_for('bp_query.renther_history') }}">История заказов</a> <br><br>
-        <a href="#">Сделать новый заказ</a> <br><br>
+        <a href="{{ url_for('bp_order.order_index') }}">Сделать новый заказ</a> <br><br>
         <a href="{{ url_for('bp_query.bill_info') }}">Информация о биллборде</a> <br><br>
 {% endblock %}

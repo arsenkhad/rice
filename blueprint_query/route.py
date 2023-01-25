@@ -36,7 +36,7 @@ def bill_orders():
 @group_required
 def renther_history_all():
     if request.method == 'GET':
-        return render_template('request.html', rq_line="Номер контракта", rq_placeholder="ID")
+        return render_template('request.html', rq_line="номер контракта", rq_placeholder="ID")
     else:
         input_id = request.form.get('input_get')
         if input_id:
