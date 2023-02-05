@@ -2,15 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Menu</title>
-    <link type="text/css" rel="stylesheet" href="static/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BB2RENT</title>
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </head>
 <body>
-<div align="center">
-    <h1> Вам доступны следующие действия</h1>
-    {% block internal_user %}{% endblock %}
-    {% block external_user %}{% endblock %}
-    <a href="/exit"> Нажмите для выхода из системы</a>
-</div>
+    <nav class="navbar navbar-expand-md sticky-top py-3 mb-4 border-bottom bg-body-tertiary">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPages" aria-controls="navbarPages" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand d-flex col-md-3 align-items-center" href="/">
+                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+                <h1>BB2RENT</h1>
+            </a>
+            <div class="collapse navbar-collapse" id="navbarPages">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link px-2" aria-current="page">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('bp_report.start_report') }}" class="nav-link px-2">Отчёты</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('bp_query.renther_history') }}" class="nav-link px-2">История</a></li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link px-2 disabled">Хто я</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link px-2 disabled">О компании</a>
+                    </li>
+                </ul>
+            </div>
+            <form action='' method="POST">
+                    {% if unlogged %}
+                        <button type="submit" class="btn btn-outline-primary me-2" name="log_in" value="log_in">Log In</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-outline-primary me-2" name="log_out" value="log_out">Log Out</button>
+                    {% endif %}
+    <!--                <button type="button" class="btn btn-primary">Sign-up</button>-->
+            </form>
+        </div>
+    </nav>
+    <div class="container text-center">
+        {% block page %}{% endblock %}
+    </div>
 </body>
 </html>

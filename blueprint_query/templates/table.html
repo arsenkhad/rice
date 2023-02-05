@@ -1,17 +1,21 @@
 {% macro out_table(schema, result) %}
-    <table border= 1 width=80%>
-        <tr>
-            {% for column in schema%}
-                <td class=border align="center">{{column}}</td>
+    <table class="table">
+        <thead>
+             <tr>
+                {% for column in schema%}
+                    <th scope="col">{{column}}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for line in result %}
+            <tr>
+                {% for column in line %}
+                <td> {{column}}</td>
+                {% endfor %}
+            </tr>
             {% endfor %}
-        </tr>
-        {% for line in result %}
-        <tr>
-            {% for column in line %}
-            <td align="center"> {{column}}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
+        </tbody>
     </table>
 {% endmacro %}
 

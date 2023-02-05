@@ -2,7 +2,7 @@ import os
 
 from flask import Blueprint, render_template, request, current_app, session, redirect, url_for
 from db_context_manager import DBContextManager
-from access import external_required
+from access import external_required, header_work
 from db_work import select_dict, insert, call_proc
 from sql_provider import SQLProvider
 from datetime import date
@@ -13,6 +13,7 @@ provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
 
 
 @blueprint_order.route('/', methods=['GET', 'POST'])
+@header_work
 @external_required
 def order_index():
     db_config = current_app.config['db_config']
@@ -56,6 +57,7 @@ def add_to_basket(b_id: str, items: dict):
 
 
 @blueprint_order.route('/save_order', methods=['GET', 'POST'])
+@header_work
 @external_required
 def save_order():
     user_id = session.get('user_id')

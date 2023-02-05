@@ -1,18 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title> Flask project</title>
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-</head>
+{% extends 'base.html' %}
+{% block page %}
+    <a href="{{url_for('bp_order.save_order')}}"> Оформить заказ</a>
 
-<body>
-
-<div align="center">
-    <br><br>
-    <a href="{{url_for('bp_order.save_order')}}"> Оформить заказ</a> <br><br>
-    <a href="{{url_for('menu_choice')}}"> Вернуться в меню пользователя</a>
-</div>
 
 {% import 'basket_utils.html' as utils %}
 
@@ -40,6 +29,4 @@
         {% endif %}
     </div>
     </div>
-</body>
-</div>
-</html>
+{% endblock %}

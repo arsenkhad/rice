@@ -1,7 +1,14 @@
 {% extends 'renther_menu.html' %}
 {% block renther_bb %}
     {% for order in orders%}
-    <div>Заказ от {{order[1]}} на сумму {{order[2]}}:</div> <br>
-    {{table.out_table(schema, lines[loop.index0])}} <br>
+    <div class="container">
+        <h5 class="text-start">Заказ от {{order[1]}} на сумму {{order[2]}}:</h5> <br>
+        <div class="row">
+            <div class="col-10 offset-1">
+                {{table.out_table(schema, lines[loop.index0])}}
+            </div>
+        </div>
+     <br>
+    </div>
     {% endfor %}
 {% endblock %}

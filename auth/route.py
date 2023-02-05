@@ -18,12 +18,13 @@ def start_auth():
         password = request.form.get('password')
         if login:
             user_info = define_user(login, password)
+            print(user_info)
             if user_info:
                 user_dict = user_info[0]
                 session['user_id'] = user_dict['user_id']
                 session['user_group'] = user_dict['user_group']
                 session.permanent = True
-                return redirect(url_for('menu_choice'))
+                return redirect(url_for('main_page'))
             else:
                 return render_template('input_login.html', message='Пользователь не найден')
         return render_template('input_login.html', message='Повторите ввод')

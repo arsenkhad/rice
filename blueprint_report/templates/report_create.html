@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Создание отчета</title>
-      <link type="text/css" rel="stylesheet" href="/static/design_list.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-</head>
-<body>
-  <h2 align="center"> Меню отчетов</h2>
-    <h2 align="center">Введите интересующий год и месяц</h2>
-        <div align="center">
+{% extends 'base.html' %}
+{% block page %}
+  <h2> Меню отчетов</h2>
+    <h2>Введите интересующий год и месяц</h2>
+        <div class="container">
             <form action="" method="POST">
                 <label for="year">Год</label>
                     <input name="input_year" id="year" type="text" placeholder="input_year"> <br><br>
@@ -19,6 +12,6 @@
                     <input type="submit" class="submit" value="Отправить">
             </form>
             <br><br>
-            <h2 align="center">{{ error_message }}</h2>
- </body>
-</html>
+            <h2>{{ error_message }}</h2>
+        </div>
+{% endblock %}

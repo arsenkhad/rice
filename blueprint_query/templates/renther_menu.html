@@ -1,24 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Queries menu</title>
-</head>
-<body>
-    <h1 align="center">Пум-пум-пум</h1><br>
+{% import 'table.html' as table %}
+{% extends 'base.html' %}
+{% block page %}
     {% for message in pre_messages %}
         <div class="info">{{message}}</div>
     {% endfor %}
     <br>
-    <center>
-        {% import 'table.html' as table %}
-        {% block renther_bb %}{% endblock %}
-        {% block bb_info %}{% endblock %}
-        {% for message in messages %}
-        <h2>{{message}}</h2> <br><br>
-        {% endfor %}
-        <br>
-        <a href="{{url_for('menu_choice')}}"> Возврат в главное меню </a>
-    </center>
-</body>
-</html>
+    {% block renther_bb %}{% endblock %}
+    {% block bb_info %}{% endblock %}
+    {% for message in messages %}
+    <h2>{{message}}</h2> <br><br>
+    {% endfor %}
+{% endblock %}

@@ -8,9 +8,21 @@ def login_required(func):
     def wrapper(*args, **kwargs):
         if 'user_id' in session:
             return func(*args, **kwargs)
-        return redirect(url_for('blueprint_auth.start_auth'))
+        return render_template('logged_out.html', unlogged=True)
     return wrapper
 
+
+def header_work(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if request.method == 'POST':
+            if request.form.get('log_out'):
+                session.clear()
+                return render_template('logged_out.html', unlogged=True)
+            elif request.form.get('log_in'):
+                return redirect(url_for('blueprint_auth.start_auth'))
+        return func(*args, **kwargs)
+    return wrapper
 
 def group_validation(config: dict) -> bool:
     endpoint_func = request.endpoint

@@ -1,7 +1,7 @@
 import os
 
 from flask import Blueprint, request, render_template, current_app, session
-from access import group_required, external_required
+from access import group_required, external_required, header_work
 from db_work import select
 from sql_provider import SQLProvider
 
@@ -12,6 +12,7 @@ provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
 
 #to be transformed to a report
 @blueprint_query.route('/bill_orders', methods=['GET', 'POST'])
+@header_work
 @group_required
 def bill_orders():
     if request.method == 'GET':
@@ -33,6 +34,7 @@ def bill_orders():
 
 
 @blueprint_query.route('/renther_orders', methods=['GET', 'POST'])
+@header_work
 @group_required
 def renther_history_all():
     if request.method == 'GET':
@@ -46,6 +48,7 @@ def renther_history_all():
 
 
 @blueprint_query.route('/renther_history', methods=['GET', 'POST'])
+@header_work
 @external_required
 def renther_history():
     _sql = provider.get('get_contract.sql', input_user=session['user_id'])
@@ -60,6 +63,7 @@ def renther_history():
 
 
 @blueprint_query.route('/bill_info', methods=['GET', 'POST'])
+@header_work
 @external_required
 def bill_info():
     if request.method == 'GET':
