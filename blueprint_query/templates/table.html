@@ -10,7 +10,8 @@
         <tbody>
             {% for line in result %}
             <tr>
-                {% for column in line %}
+                <th scope="row"> {{line[0]}} </th>
+                {% for column in line[1:] %}
                 <td> {{column}}</td>
                 {% endfor %}
             </tr>
@@ -22,6 +23,6 @@
 {% if render %}
     {% extends 'renther_menu.html' %}
     {% block bb_info %}
-        {{table.out_table(schema, result)}}
+        {{tmp.out_table(schema, result)}}
     {% endblock %}
 {% endif %}

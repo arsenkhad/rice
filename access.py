@@ -3,28 +3,11 @@ from functools import wraps
 from flask import session, render_template, current_app, request, redirect, url_for
 
 
-def login_required(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        if 'user_id' in session:
-            return func(*args, **kwargs)
-        return render_template('logged_out.html', unlogged=True)
-    return wrapper
-
-
-def header_work(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        if request.method == 'POST':
-            if request.form.get('log_out'):
-                session.clear()
-                return render_template('logged_out.html', unlogged=True)
-            elif request.form.get('log_in'):
-                return redirect(url_for('blueprint_auth.start_auth'))
-        return func(*args, **kwargs)
-    return wrapper
-
 def group_validation(config: dict) -> bool:
+    """
+    Проверка, обладает ли текущий пользователь правами доступа к странице:
+    Прописан ли текущий путь в json-фойле для данной группы пользователей
+    """
     endpoint_func = request.endpoint
     endpoint_app = request.endpoint.split('.')[0]
     if 'user_group' in session:
@@ -37,6 +20,9 @@ def group_validation(config: dict) -> bool:
 
 
 def group_required(f):
+    """
+        Декоратор для проверки прав доступа внутреннего пользователя
+    """
     @wraps(f)
     def wrapper(*args, **kwargs):
         config = current_app.config['access_config']
@@ -47,6 +33,10 @@ def group_required(f):
 
 
 def external_validation(config):
+    """
+        Проверка, обладает ли текущий пользователь правами доступа к странице:
+        Прописан ли текущий путь в json-фойле для внешнего пользователя
+    """
     endpoint_func = request.endpoint
     endpoint_app = request.endpoint.split('.')[0]
     user_id = session.get('user_id', None)
@@ -59,7 +49,25 @@ def external_validation(config):
     return False
 
 
+def external_check(f):
+    """
+        Декоратор для проверки прав доступа внешнего пользователя
+        Вместо вывода заглушки добавляет к вызову аргумент notExt
+    """
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        config = current_app.config['access_config']
+        if external_validation(config):
+            return f(*args, **kwargs)
+        return f(*args, **kwargs, notExt=True)
+    return wrapper
+
+
+
 def external_required(f):
+    """
+        Декоратор для проверки прав доступа внешнего пользователя
+    """
     @wraps(f)
     def wrapper(*args, **kwargs):
         config = current_app.config['access_config']

@@ -1,0 +1,1 @@
+select contract_num, r_name, r_sphere, contract_date from renther

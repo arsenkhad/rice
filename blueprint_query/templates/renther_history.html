@@ -1,14 +1,43 @@
-{% extends 'renther_menu.html' %}
-{% block renther_bb %}
-    {% for order in orders%}
-    <div class="container">
-        <h5 class="text-start">Заказ от {{order[1]}} на сумму {{order[2]}}:</h5> <br>
-        <div class="row">
-            <div class="col-10 offset-1">
-                {{table.out_table(schema, lines[loop.index0])}}
+{% extends 'base.html' %}
+{% block page %}
+{% import 'query_template.html' as tmp %}
+    {% if info %}
+    <div class="card m-5 d-flex row justify-content-between">
+        <div class="card-header d-flex justify-content-between">
+            <a class="btn" href="">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                </svg>
+                Назад
+            </a>
+            <div class="d-flex align-items-center">
+                <h4 class="px-3 m-0">
+                    {{info['r_name']}},
+                    <small class="text-secondary">{{info['r_sphere']}}</small>
+                </h4>
             </div>
         </div>
-     <br>
+        <div class="card-body text-end p-3">
+            <div class="card-title">Контракт &numero;<b>{{info['contract_num']}}</b> от {{info['contract_date']}}</div>
+            <div class="card-text">Адрес: {{info['r_adress']}}</div>
+            <div class="card-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-outbound-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511zM11 .5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V1.707l-4.146 4.147a.5.5 0 0 1-.708-.708L14.293 1H11.5a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+                <a href="tel:{{info['r_phone']}}">{{info['r_phone']}}</a>
+            </div>
+        </div>
     </div>
+    {% endif %}
+    <h1 class="pg-title mb-3">История заказов</h1>
+    {% for order in orders%}
+        <div class="container-fluid">
+            <h5 class="text-start mt-5">Заказ от {{order[1]}} на сумму {{order[2]}}:</h5>
+            <div class="mb-4">
+                <div class="mx-md-5 m-2">
+                    {{tmp.out_table(schema, lines[loop.index0])}}
+                </div>
+            </div>
+        </div>
     {% endfor %}
 {% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block page %}
+{% import 'query_template.html' as tmp %}
+<h1 class="pg-title mb-3">Информация об арендаторах</h1>
+<div class="row p-0 m-0">
+    {% for person in renthers %}
+    {{ tmp.render_person(person) }}
+    {% endfor %}
+</div>
+{% endblock %}

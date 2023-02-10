@@ -2,7 +2,7 @@ import os
 
 from flask import Blueprint, render_template, request, current_app, session, redirect, url_for
 from db_context_manager import DBContextManager
-from access import external_required, header_work
+from access import external_required, external_check
 from db_work import select_dict, insert, call_proc
 from sql_provider import SQLProvider
 from datetime import date
@@ -13,16 +13,14 @@ provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
 
 
 @blueprint_order.route('/', methods=['GET', 'POST'])
-@header_work
-@external_required
-def order_index():
+@external_check
+def order_index(notExt=False):
     db_config = current_app.config['db_config']
-
     if request.method == 'GET':
         sql = provider.get('all_items.sql')
         items = select_dict(db_config, sql)
         basket_items = session.get('basket', {})
-        return render_template('basket_order_list.html', items=items, basket=basket_items)
+        return render_template('basket_order_list.html', items=items, basket=basket_items, notExt=notExt)
     else:
         b_id = request.form['b_id']
         sql = provider.get('all_items.sql')
@@ -57,19 +55,19 @@ def add_to_basket(b_id: str, items: dict):
 
 
 @blueprint_order.route('/save_order', methods=['GET', 'POST'])
-@header_work
 @external_required
 def save_order():
     user_id = session.get('user_id')
-    current_basket = session.get('basket', {})
-    sql = provider.get('get_contract.sql', user_id=user_id)
-    contract_num = insert(current_app.config['db_config'], sql)
-    o_id = save_order_with_list(current_app.config['db_config'], contract_num, current_basket)
-    print(current_basket)
-    if o_id:
-        call_proc(current_app.config['db_config'], 'cost_update', int(o_id))
-        session.pop('basket')
-        return render_template('order_created.html', o_id=o_id)
+    if session.get('basket', {}):
+        current_basket = session.get('basket', {})
+        sql = provider.get('get_contract.sql', user_id=user_id)
+        contract_num = insert(current_app.config['db_config'], sql)
+        o_id = save_order_with_list(current_app.config['db_config'], contract_num, current_basket)
+        print(current_basket)
+        if o_id:
+            call_proc(current_app.config['db_config'], 'cost_update', int(o_id))
+            session.pop('basket')
+            return render_template('order_created.html', o_id=o_id)
     else:
         return 'Что-то пошло не так'
 

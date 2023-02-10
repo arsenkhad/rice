@@ -1,23 +1,20 @@
 {% extends 'base.html' %}
 {% block page %}
-    <a href="{{url_for('bp_order.save_order')}}"> Оформить заказ</a>
-
-
 {% import 'basket_utils.html' as utils %}
-
-
-<div class="container">
-    <div class="col-md-8">
-        <h2>Все товары</h2>
+    <h1 class="pg-title mb-3">Каталог билбордов</h1>
+    <div class="m-0 p-0 row">
         {% if items %}
         {% for item in items %}
-            {{ utils.render_item(item, show_form = True) }}
+            {{ utils.render_item(item, show_form = True, notExt=notExt) }}
         {% endfor %}
         {% else %}
-            <p> Нет доступных товаров</p>
+            <p> Нет доступных билбордов</p>
         {% endif %}
     </div>
-    <div class="col-md-4">
+    {% if notExt %}
+        <div class="m-5">Войдите как пользователь, чтобы совершать заказы</div>
+    {% else %}
+    <div class="my-4">
         <h2 style="">Ваша корзина</h2>
         <a style='' href="{{url_for('bp_order.clear_basket')}}">Очистить корзину</a>
         {% if basket %}
@@ -27,6 +24,7 @@
         {% else %}
             <p>Ваша корзина пуста</p>
         {% endif %}
+        <a class="btn btn-primary" href="{{url_for('bp_order.save_order')}}"> Оформить заказ</a>
     </div>
-    </div>
+    {% endif %}
 {% endblock %}

@@ -1,24 +1,54 @@
-{% macro render_item(item, show_form=False, show_period=False) %}
-    <div style="border-style: solid; border-color: black; margin: 5px">
-        <span style="color: black;"> Адрес: </span>
-        <span style="color: green;"> {{ item['b_adress'] }} </span>
-        <span style="color: black;"> Цена: </span>
-        <span style="color: green;"> {{ item['b_cost'] }}₽/месяц </span>
+{% macro render_item(item, show_form=False, show_period=False, notExt=False) %}
+    <div class="col-lg-6">
+        <div class="card my-4 rounded">
+            <h4 class="card-header px-3 text-start"> {{ item['b_adress'] }} </h4>
+            <div class="card-body p-3 d-flex justify-content-between">
+                {% if show_form %}
+                <a class="btn dropdown-toggle" data-bs-toggle="collapse" href="#Info{{item['b_id']}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Характеристики
+                </a>
+                {% endif %}
+                <div class="d-flex justify-content-end align-items-center">
+                    <div class="mx-4 py-2">{{ item['b_cost'] }}₽/месяц</div>
+                    {% if show_form %}
+                    <div>
+                        <form action="" method="post">
+                            <input type="hidden" name="b_id" value="{{ item['b_id'] }}">
+                            <button class="btn btn-success rounded-pill {% if notExt %} disabled {% endif %}" type="submit" name="action">Добавить</button>
+                        </form>
+                    </div>
+                    {% endif %}
 
-        {% if show_period %}
-            <span style="color: black;"> Начало аренды: </span>
-            <span style="color: green;"> {{ item['rent_start'] }} </span>
-            <span style="color: black;"> Время аренды: </span>
-            <span style="color: green;"> {{ item['rent_len'] }} </span>
-        {% endif %}
-
-        {% if show_form %}
-            <div>
-                <form action="" method="post">
-                    <input type="hidden" name="b_id" value="{{ item['b_id'] }}">
-                    <input type="submit" name="action" value="add">
-                </form>
+                    {% if show_period %}
+                        <span> Начало аренды: </span>
+                        <span> {{ item['rent_start'] }} </span>
+                        <span> Время аренды: </span>
+                        <span> {{ item['rent_len'] }} </span>
+                    {% endif %}
+                </div>
             </div>
-        {% endif %}
+            {% if show_form %}
+            <div class="collapse px-5 mb-3" id="Info{{item['b_id']}}">
+                <table class="table table-sm d-flex text-start">
+                    <tr>
+                        <th class="text-end px-3" scope="row">Тип:</th>
+                        <td class="px-3">{{item['b_type']}}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-end px-3" scope="row">Размер:</th>
+                        <td class="px-3">{{item['b_size']}}&Prime;</td>
+                    </tr>
+                    <tr>
+                        <th class="text-end px-3" scope="row">Качество:</th>
+                        <td class="px-3">{{item['b_quality']}}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-end px-3" scope="row">Дата установки:</th>
+                        <td class="px-3">{{item['b_setdate']}}</td>
+                    </tr>
+                </table>
+            </div>
+            {% endif %}
+        </div>
     </div>
 {% endmacro %}

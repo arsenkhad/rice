@@ -23,6 +23,14 @@ def select(db_config: dict, sql: str) -> Tuple[Tuple, List[str]]:
 
 
 def select_dict(db_config: dict, _sql: str):
+    """
+       Выполняет запрос (SELECT) к БД с указанным конфигом и запросом.
+       Args:
+           db_config: dict - Конфиг для подключения к БД.
+           _sql: str - SQL-запрос.
+       Return:
+           Список словарей, где ключ - имя колонки, значение - результат запроса в текущей строке
+       """
     with DBContextManager(db_config) as cursor:
         if cursor is None:
             raise ValueError('Cursor not found')
@@ -37,21 +45,37 @@ def select_dict(db_config: dict, _sql: str):
     return result
 
 
-def insert(dbconfig: dict, _sql: str):
-    with DBContextManager(dbconfig) as cursor:
+def insert(db_config: dict, _sql: str):
+    """
+       Выполняет SQL-код с БД с указанным конфигом.
+       Args:
+           db_config: dict - Конфиг для подключения к БД.
+           _sql: str - SQL-код.
+       Return:
+           Результат выполнения SQL-кода
+       """
+    with DBContextManager(db_config) as cursor:
         if cursor is None:
             raise ValueError('Курсор не создан')
         result = cursor.execute(_sql)
     return result
 
 
-def call_proc(dbconfig: dict, proc_name: str, *args):
-    with DBContextManager(dbconfig) as cursor:
+def call_proc(db_config: dict, proc_name: str, *args):
+    """
+       Выполняет вызов процедуры в БД с указанным конфигом и аргументами.
+       Args:
+           db_config: dict - Конфиг для подключения к БД.
+           proc_name: str - Название процедуры.
+           *args: any - Аргументы вызова процедуры
+       Return:
+           Результат выполнения процедуры.
+       """
+    with DBContextManager(db_config) as cursor:
         if cursor is None:
             raise ValueError('Курсор не создан')
         param_list = []
         for arg in args:
-            print
             param_list.append(arg)
 
         res = cursor.callproc(proc_name, param_list)

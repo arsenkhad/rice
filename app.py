@@ -1,7 +1,6 @@
 from flask import Flask, url_for, render_template, request, json, session, redirect
 from auth.route import blueprint_auth
 from basket.route import blueprint_order
-from access import login_required, header_work
 from blueprint_query.route import blueprint_query
 from blueprint_report.route import blueprint_report
 
@@ -20,13 +19,14 @@ app.config['report_list'] = json.load(open('data_files/report_list.json', encodi
 
 
 @app.route('/', methods=['GET', 'POST'])
-@header_work
-@login_required
 def main_page():
-    if session.get('user_group', None):
-        return render_template('internal_user_menu.html')
-    else:
-        return render_template('external_user_menu.html')
+    return render_template('index.html')
+
+
+@app.route('/log_out', methods=['GET', 'POST'])
+def log_out():
+    session.clear()
+    return redirect(url_for('main_page'))
 
 
 if __name__ == '__main__':

@@ -1,13 +1,7 @@
-{% import 'table.html' as table %}
+{% import 'query_template.html' as tmp %}
 {% extends 'base.html' %}
 {% block page %}
-    {% for message in pre_messages %}
-        <div class="info">{{message}}</div>
-    {% endfor %}
-    <br>
-    {% block renther_bb %}{% endblock %}
-    {% block bb_info %}{% endblock %}
     {% for message in messages %}
-    <h2>{{message}}</h2> <br><br>
+    <h2 class="mb-4">{{message}}</h2>
     {% endfor %}
 {% endblock %}

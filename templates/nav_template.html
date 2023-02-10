@@ -1,0 +1,13 @@
+{% macro nav_tab(name, route, off=False) %}
+<li class="nav-item">
+    <a href="{{ url_for(route) }}" class="nav-link px-2
+    {% if off%}
+        disabled
+    {% endif %}
+    {% if request.url_rule.endpoint == route and not off%}
+        active
+    {% endif %}">
+        {{name}}
+    </a>
+</li>
+{% endmacro %}
