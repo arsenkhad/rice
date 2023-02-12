@@ -3,6 +3,15 @@ from functools import wraps
 from flask import session, render_template, current_app, request, redirect, url_for
 
 
+def login_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if 'user_id' in session:
+            return func(*args, **kwargs)
+        return redirect(url_for('blueprint_auth.start_auth'))
+    return wrapper
+
+
 def group_validation(config: dict) -> bool:
     """
     Проверка, обладает ли текущий пользователь правами доступа к странице:
@@ -47,21 +56,6 @@ def external_validation(config):
         elif endpoint_func in config['external']:
             return True
     return False
-
-
-def external_check(f):
-    """
-        Декоратор для проверки прав доступа внешнего пользователя
-        Вместо вывода заглушки добавляет к вызову аргумент notExt
-    """
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        config = current_app.config['access_config']
-        if external_validation(config):
-            return f(*args, **kwargs)
-        return f(*args, **kwargs, notExt=True)
-    return wrapper
-
 
 
 def external_required(f):

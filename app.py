@@ -3,6 +3,7 @@ from auth.route import blueprint_auth
 from basket.route import blueprint_order
 from blueprint_query.route import blueprint_query
 from blueprint_report.route import blueprint_report
+from access import login_required
 
 app = Flask(__name__)
 app.secret_key = 'Pa$$w0rd'
@@ -23,10 +24,21 @@ def main_page():
     return render_template('index.html')
 
 
+@app.route('/about',  methods=['GET', 'POST'])
+def about():
+    return render_template('company.html')
+
+
+@app.route('/profile',  methods=['GET', 'POST'])
+@login_required
+def profile():
+    return render_template('profile.html')
+
+
 @app.route('/log_out', methods=['GET', 'POST'])
 def log_out():
     session.clear()
-    return redirect(url_for('main_page'))
+    return redirect(request.referrer)
 
 
 if __name__ == '__main__':

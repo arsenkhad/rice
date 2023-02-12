@@ -17,7 +17,7 @@ def start_auth():
         login = request.form.get('login')
         password = request.form.get('password')
         print(login, password)
-        if login:
+        if login and password:
             user_info = define_user(login, password)
             print(user_info)
             if user_info:
@@ -27,8 +27,8 @@ def start_auth():
                 session.permanent = True
                 return redirect(url_for('main_page'))
             else:
-                return render_template('input_login.html', message='Пользователь не найден')
-        return render_template('input_login.html', message='Повторите ввод')
+                return render_template('input_login.html', message='Неверный логин или пароль')
+        return render_template('input_login.html', message='Поля не должны быть пустыми')
 
 
 def define_user(login: str, password: str) -> Optional[Dict]:

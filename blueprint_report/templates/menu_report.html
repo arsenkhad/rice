@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block page %}
-    <h2>Меню работы с отчетами</h2><br><br>
+    <h1 class="mb-3">Меню работы с отчетами</h1>
         {% for report in report_list %}
             <form action='' method = 'POST'>
                 <label for="create_rep" class="named_list">{{report['rep_name']}}</label>

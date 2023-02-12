@@ -1,0 +1,16 @@
+{% import 'basket_template.html' as tmp %}
+{% set basket = session.get('basket', {}) %}
+        <h3 class="mb-4">Ваша корзина</h3>
+        {% if basket %}
+            <div>
+                {% for key in basket %}
+                {{ tmp.render_b_item(basket[key]) }}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div>Ваша корзина пуста</div>
+        {% endif %}
+        <div class="d-flex justify-content-between mt-4">
+            <a class="btn btn-outline-primary mx-2 {% if not basket %} invisible {% endif %}" href="{{url_for('bp_order.clear_basket')}}">Очистить корзину</a>
+            <a class="btn btn-primary mx-2 {% if not basket %} disabled {% endif %}" href="{{url_for('bp_order.save_order')}}"> Оформить заказ</a>
+        </div>

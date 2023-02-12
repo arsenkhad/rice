@@ -21,11 +21,11 @@
 
         <div class="form-floating">
             <input type="text" class="form-control" id="login" name="login" placeholder="Логин">
-            <label for="login">login</label>
+            <label class="form-label" for="login">login</label>
         </div>
         <div class="form-floating">
             <input type="password" class="form-control" id="password" name="password" placeholder="Пароль">
-            <label for="password">password</label>
+            <label class="form-label" for="password">password</label>
         </div>
 
         <!--    <div class="checkbox mb-3">-->
@@ -33,10 +33,15 @@
         <!--        <input type="checkbox" value="remember-me"> Remember me-->
         <!--      </label>-->
         <!--    </div>-->
-
+        <div class="my-2">
+            {% if message %}
+                <h6 class="text-danger">{{ message }}</h6>
+            {% else %}
+                <h6 class="invisible">AoA</h6>
+            {% endif %}
+        </div>
         <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">Войти</button>
-        <h2>{{ message }}</h2>
-        <p class="mt-5 mb-3 text-muted">© 2022–2023</p>
+        <p class="mt-3 mb-3 text-muted">© 2022–2023</p>
     </form>
 </main>
 </div>

@@ -2,7 +2,7 @@ import os
 
 from flask import Blueprint, render_template, request, current_app, session, redirect, url_for
 from db_context_manager import DBContextManager
-from access import external_required, external_check
+from access import external_required
 from db_work import select_dict, insert, call_proc
 from sql_provider import SQLProvider
 from datetime import date
@@ -13,21 +13,18 @@ provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
 
 
 @blueprint_order.route('/', methods=['GET', 'POST'])
-@external_check
-def order_index(notExt=False):
+def order_index():
     db_config = current_app.config['db_config']
     if request.method == 'GET':
         sql = provider.get('all_items.sql')
         items = select_dict(db_config, sql)
         basket_items = session.get('basket', {})
-        return render_template('basket_order_list.html', items=items, basket=basket_items, notExt=notExt)
+        return render_template('catalog.html', items=items, basket=basket_items)
     else:
         b_id = request.form['b_id']
         sql = provider.get('all_items.sql')
         items = select_dict(db_config, sql)
-
         add_to_basket(b_id, items)
-
         return redirect(url_for('bp_order.order_index'))
 
 
@@ -99,4 +96,4 @@ def save_order_with_list(dbconfig: dict, contract_num: int, current_basket: dict
 def clear_basket():
     if 'basket' in session:
         session.pop('basket')
-    return redirect(url_for('bp_order.order_index'))
+    return redirect(request.referrer)

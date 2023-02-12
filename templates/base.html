@@ -7,15 +7,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
-    <nav class="navbar navbar-expand-md sticky-top py-3 mb-4 border-bottom bg-body-tertiary">
+    <nav class="navbar navbar-expand-md sticky-top py-2 mb-4 border-bottom bg-body-tertiary">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPages" aria-controls="navbarPages" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand d-flex col-md-3 align-items-center" href="/">
-                <img class="bi me-2" src="/static/bb-icon.svg" width="32">
-                <h1>BB2RENT</h1>
+
+            <a class="navbar-brand d-flex col-md-3 ms-2 py-2 align-items-center" href="/">
+                <img class="bi mx-2" src="/static/bb-icon.svg" width="32" alt="">
+                <h1 class="mx-2">BB2RENT</h1>
             </a>
+
             <div class="collapse navbar-collapse" id="navbarPages">
                 {% import 'nav_template.html' as nav %}
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
@@ -29,31 +31,56 @@
                             {{ nav.nav_tab('История', 'bp_query.renther_history') }}
                         {% endif %}
                     {% endif %}
-                    {{ nav.nav_tab('О компании', request.url_rule.endpoint, off=True) }}
+
+                    {{ nav.nav_tab('О компании', 'about') }}
                 </ul>
             </div>
+            <div class="d-flex align-items-center">
             {% if session and not session.get('user_group', None) %}
-                <a href="{{url_for('bp_order.order_index')}}" class="btn btn-lg me-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                    </svg>
-                </a>
+                <div class="dropdown">
+                    <button class="btn py-2 px-3 me-2" type="button" id="Basket" data-bs-toggle="dropdown">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end text-end mt-3 p-3" style="min-width: 400px">
+                        {% include 'basket.html' %}
+                    </ul>
+                </div>
+
             {% endif %}
+
             {% if not session%}
-                <a href="{{url_for('blueprint_auth.start_auth')}}" class="btn btn-outline-primary me-2">
+                <a href="{{url_for('blueprint_auth.start_auth')}}" class="btn btn-outline-primary me-3">
                     Войти
                 </a>
             {% else %}
-                <a href="/log_out" class="btn btn-outline-primary me-2">
-                    Выйти
-                </a>
-
+                <div class="dropdown me-3">
+                    <button class="btn" type="button" id="UserMenu" data-bs-toggle="dropdown">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                        </svg>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end mt-3 p-3">
+                        <li><a class="px-3 py-2 mb-2 rounded dropdown-item" href="{{url_for('profile')}}"><b>Мой профиль</b></a></li>
+<!--                        <li><hr class="dropdown-divider mt-2 mb-1"></li>-->
+                        <li><a href="/log_out" class="btn px-3 py-2 rounded d-flex dropdown-item align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="24" fill="currentColor" class="bi m-1 bi-box-arrow-right" viewBox="0 0 16 16" preserveAspectRatio="none">
+                                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                            </svg>
+                            <div class="ms-1">Выйти</div>
+                        </a></li>
+                    </ul>
+                </div>
             {% endif %}
-    <!--                <button type="button" class="btn btn-primary">Sign-up</button>-->
+            </div>
+
         </div>
     </nav>
 
-    <div class="container-fluid text-center">
+    <div class="container-fluid text-center" data-bs-spy="scroll">
         {% block page required %}{% endblock %}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
