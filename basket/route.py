@@ -19,7 +19,7 @@ def order_index():
         sql = provider.get('all_items.sql')
         items = select_dict(db_config, sql)
         basket_items = session.get('basket', {})
-        return render_template('catalog.html', items=items, basket=basket_items)
+        return render_template('catalog.html', items=items)
     else:
         b_id = request.form['b_id']
         sql = provider.get('all_items.sql')
@@ -59,14 +59,15 @@ def save_order():
         current_basket = session.get('basket', {})
         sql = provider.get('get_contract.sql', user_id=user_id)
         contract_num = insert(current_app.config['db_config'], sql)
+        print(user_id, contract_num)
         o_id = save_order_with_list(current_app.config['db_config'], contract_num, current_basket)
         print(current_basket)
         if o_id:
             call_proc(current_app.config['db_config'], 'cost_update', int(o_id))
             session.pop('basket')
-            return render_template('order_created.html', o_id=o_id)
+            return render_template('order_created.html', order_id=o_id)
     else:
-        return 'Что-то пошло не так'
+        return render_template('log.html', message='Что-то пошло не так')
 
 
 def save_order_with_list(dbconfig: dict, contract_num: int, current_basket: dict):
@@ -88,7 +89,12 @@ def save_order_with_list(dbconfig: dict, contract_num: int, current_basket: dict
                                          start_mon=current_basket[key]['rent_start_month'],
                                          start_year=current_basket[key]['rent_start_year'],
                                          rent_len=current_basket[key]['rent_len'])
+                    _sql4 = provider.get('insert_schedule.sql', b_id=key,
+                                         start_mon=current_basket[key]['rent_start_month'],
+                                         start_year=current_basket[key]['rent_start_year'],
+                                         rent_len=current_basket[key]['rent_len'])
                     cursor.execute(_sql3)
+                    cursor.execute(_sql4)
                 return o_id
 
 

@@ -8,42 +8,29 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-md sticky-top py-2 mb-4 border-bottom bg-body-tertiary">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPages" aria-controls="navbarPages" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="container-fluid px-md-2 px-0">
+            <button class="navbar-toggler border-0 mx-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPages" aria-controls="navbarPages" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <a class="navbar-brand d-flex col-md-3 ms-2 py-2 align-items-center" href="/">
-                <img class="bi mx-2" src="/static/bb-icon.svg" width="32" alt="">
-                <h1 class="mx-2">BB2RENT</h1>
+            <a class="navbar-brand d-flex col-md-3 ms-sm-2 me-sm-3 mx-1 py-2 align-items-center" href="/">
+                <img class="bi mx-sm-2" src="/static/bb-icon.svg" width="32" alt="">
+                <h1 class="mx-2 d-none d-sm-inline">BB2RENT</h1>
             </a>
 
-            <div class="collapse navbar-collapse" id="navbarPages">
-                {% import 'nav_template.html' as nav %}
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
-                    {{ nav.nav_tab('Главная', 'main_page') }}
-                    {{ nav.nav_tab('Каталог', 'bp_order.order_index') }}
-                    {% if session %}
-                        {% if session.get('user_group', None) %}
-                            {{ nav.nav_tab('Отчёты', 'bp_report.start_report') }}
-                            {{ nav.nav_tab('Арендаторы', 'bp_query.renther_history_all') }}
-                        {% else %}
-                            {{ nav.nav_tab('История', 'bp_query.renther_history') }}
-                        {% endif %}
-                    {% endif %}
-
-                    {{ nav.nav_tab('О компании', 'about') }}
-                </ul>
+            <div class="d-none navbar-collapse d-md-block">
+                {% include 'navbar.html' %}
             </div>
-            <div class="d-flex align-items-center">
+
+            <div class="d-flex align-items-center me-2">
             {% if session and not session.get('user_group', None) %}
-                <div class="dropdown">
-                    <button class="btn py-2 px-3 me-2" type="button" id="Basket" data-bs-toggle="dropdown">
+                <div class="dropdown mx-sm-1">
+                    <button class="btn py-2 px-3" type="button" id="Basket" data-bs-toggle="dropdown">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
                             <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                         </svg>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end text-end mt-3 p-3" style="min-width: 400px">
+                    <ul class="dropdown-menu dropdown-menu-end text-end mt-3 p-3" style="margin-right: -58px; min-width: 40vw; max-width: 96vw; width: 400px">
                         {% include 'basket.html' %}
                     </ul>
                 </div>
@@ -51,11 +38,11 @@
             {% endif %}
 
             {% if not session%}
-                <a href="{{url_for('blueprint_auth.start_auth')}}" class="btn btn-outline-primary me-3">
+                <a href="{{url_for('blueprint_auth.start_auth')}}" class="btn btn-outline-primary mx-sm-1">
                     Войти
                 </a>
             {% else %}
-                <div class="dropdown me-3">
+                <div class="dropdown mx-sm-1">
                     <button class="btn" type="button" id="UserMenu" data-bs-toggle="dropdown">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
@@ -76,7 +63,9 @@
                 </div>
             {% endif %}
             </div>
-
+            <div class="d-md-none collapse col-12" id="navbarPages">
+                {% include 'navbar.html' %}
+            </div>
         </div>
     </nav>
 

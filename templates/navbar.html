@@ -1,0 +1,33 @@
+{% macro nav_tab(name, route, off=False) %}
+<li class="nav-item">
+    <a href="{{ url_for(route) }}" class="nav-link px-2
+    {% if off%}
+        disabled
+    {% endif %}
+    {% if request.url_rule.endpoint == route and not off%}
+        active
+    {% endif %}">
+        {{name}}
+    </a>
+</li>
+{% endmacro %}
+
+<ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
+    {{ nav_tab('Главная', 'main_page') }}
+    {{ nav_tab('Каталог', 'bp_order.order_index') }}
+    {% if session %}
+        {% if session.get('user_group', None) %}
+            {% if session.get('user_group', None) in ['admin', 'manager'] %}
+                {{ nav_tab('Отчёты', 'bp_report.start_report') }}
+                {{ nav_tab('Арендаторы', 'bp_query.renther_history_all') }}
+            {% endif %}
+            {% if session.get('user_group', None) in ['admin', 'worker'] %}
+                {{ nav_tab('Расписание', 'bp_query.view_schedule') }}
+            {% endif %}
+        {% else %}
+            {{ nav_tab('История', 'bp_query.renther_history') }}
+        {% endif %}
+    {% endif %}
+
+    {{ nav_tab('О компании', 'about') }}
+</ul>

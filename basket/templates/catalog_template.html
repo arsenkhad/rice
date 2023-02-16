@@ -1,40 +1,105 @@
+{% macro purchase(id, cost, notExt, modal=False) %}
+<div class="py-2 me-3 {% if not modal %} me-md-0 {% endif %}">{{ cost }}&#8381;/месяц</div>
+<div>
+    <div class="dropdown">
+        <button class="btn btn-success rounded-pill {% if notExt %} disabled {% endif %}" type="button" data-bs-toggle="dropdown">Добавить</button>
+        <div class="dropdown-menu dropdown-menu-end my-3 p-2">
+            <div class="d-inline-flex flex-column">
+                <table class="table table-borderless text-center mb-2">
+                    <thead>
+                        <tr class="table-bordered">
+                            <td class="text-disabled"> 2022 </td>
+                            <th> 2023 </th>
+                            <td class="text-secondary"> 2024 </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr> <td>Jan</td> <td>Feb</td> <td>Mar</td> </tr>
+                        <tr> <td>Apr</td> <td>May</td> <td>June</td> </tr>
+                        <tr> <td>July</td> <td>Aug</td> <td>Sep</td> </tr>
+                        <tr> <td>Oct</td> <td>Nov</td> <td>Dec</td> </tr>
+                    </tbody>
+                </table>
+                <form class="ms-auto mb-2" action="" method="post">
+                    <input type="hidden" name="b_id" value="{{ id }}">
+                    <button class="btn btn-success rounded-pill {% if notExt %} disabled {% endif %}" type="submit" name="AddBaskt">Добавить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
 {% macro render_c_item(item, notExt=False) %}
-    <div class="col-lg-6">
-        <div class="card my-4 rounded">
-            <h4 class="card-header px-3 text-start"> {{ item['b_adress'] }} </h4>
-            <div class="card-body p-3 d-flex justify-content-between">
-                <a class="btn dropdown-toggle" data-bs-toggle="collapse" href="#Info{{item['b_id']}}" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    Характеристики
+    <div class="mt-5 col-lg-6 col-8 offset-2 offset-lg-0">
+        <div class="card mb-3 rounded">
+            <div class="row m-0">
+                <a class="col-md-4 p-0 sm-disabled" href="#Img{{item['b_id']}}" data-bs-toggle="modal">
+                    <img class="bd-placeholder-img d-md-block d-none rounded-start" src="/static/bb_example.jpg" style="size: auto; width: 100%" alt="Билборд">
+                    <img class="bd-placeholder-img d-md-none rounded-top" src="/static/bb_example.jpg" width="100%" alt="Билборд">
                 </a>
-                <div class="d-flex justify-content-end align-items-center">
-                    <div class="mx-4 py-2">{{ item['b_cost'] }}₽/месяц</div>
-                    <div>
-                        <form action="" method="post">
-                            <input type="hidden" name="b_id" value="{{ item['b_id'] }}">
-                            <button class="btn btn-success rounded-pill {% if notExt %} disabled {% endif %}" type="submit" name="AddBaskt">Добавить</button>
-                        </form>
+                <div class="col-md-8 d-flex flex-column justify-content-around card-body py-md-2">
+                    <h4 class="card-title text-start"> {{ item['b_adress'] }} </h4>
+                    <div class="d-flex flex-wrap justify-content-between align-items-center">
+                        <div class="me-2">
+                            <a class="btn dropdown-toggle" data-bs-toggle="modal" href="#Info{{item['b_id']}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                Характеристики
+                            </a>
+                        </div>
+
+                        <div class="d-flex ms-auto me-md-2 d-md-block justify-content-end">
+                            {{ purchase(item['b_id'], item['b_cost'], notExt) }}
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="collapse px-5 mb-3" id="Info{{item['b_id']}}">
-                <table class="table table-sm d-flex text-start">
-                    <tr>
-                        <th class="text-end px-3" scope="row">Тип:</th>
-                        <td class="px-3">{{item['b_type']}}</td>
-                    </tr>
-                    <tr>
-                        <th class="text-end px-3" scope="row">Размер:</th>
-                        <td class="px-3">{{item['b_size']}}&Prime;</td>
-                    </tr>
-                    <tr>
-                        <th class="text-end px-3" scope="row">Качество:</th>
-                        <td class="px-3">{{item['b_quality']}}</td>
-                    </tr>
-                    <tr>
-                        <th class="text-end px-3" scope="row">Дата установки:</th>
-                        <td class="px-3">{{item['b_setdate']}}</td>
-                    </tr>
-                </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="Img{{item['b_id']}}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <button type="button" class="btn btn-close btn-lg position-absolute m-1 start-md-100 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                <img class="bd-placeholder-img rounded w-100" src="/static/bb_example.jpg" alt="Билборд">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="Info{{item['b_id']}}">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Характеристики</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-lg-flex align-items-center">
+                    <img class="bd-placeholder-img rounded mb-3 me-4 d-none d-lg-inline-block" src="/static/bb_example.jpg" style="width: 40%; max-height: 200px" alt="Билборд">
+                    <table class="table table-sm table-borderless d-flex text-start">
+                        <tr>
+                            <th class="text-end px-3" scope="row">Адрес:</th>
+                            <td class="px-3">{{item['b_adress']}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end px-3" scope="row">Тип:</th>
+                            <td class="px-3">{{item['b_type']}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end px-3" scope="row">Размер:</th>
+                            <td class="px-3">{{item['b_size']}}&Prime;</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end px-3" scope="row">Качество:</th>
+                            <td class="px-3">{{item['b_quality']}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end px-3" scope="row">Дата установки:</th>
+                            <td class="px-3">{{item['b_setdate']}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    {{ purchase(item['b_id'], item['b_cost'], notExt, True) }}
+                </div>
             </div>
         </div>
     </div>

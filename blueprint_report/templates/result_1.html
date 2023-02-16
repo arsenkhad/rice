@@ -1,20 +1,25 @@
+{% import 'output_template.html' as out %}
 {% extends 'base.html' %}
 {% block page %}
-    <h1> Отчет  </h1> <br><br>
-    <table border= 1 width=80% >
-        <tr>
-            {% for column in schema%}
-                <td class=border align="center">{{column}}</td>
-
+    <a class="btn ms-4 mt-2 d-none d-sm-block position-absolute start-0" href=''>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+        </svg>
+        Назад
+    </a>
+    <h1 class="pg-title display-6 mb-3">
+        Отчёт от {{out.month_end(result[0][0])}}-{{result[0][1]}}:
+    </h1>
+    <div class="card mt-5 offset-lg-3 offset-md-2 col-lg-6 col-md-8 text-start">
+        <h4 class="card-header p-3">Заказы:</h4>
+        <ul class="card-body p-0 list-group list-group-flush">
+            {% set sum = namespace(amount = 0, cost = 0) %}
+            {% for line in result %}
+                {% set sum.amount = sum.amount + line[2] %}
+                {% set sum.cost = sum.cost + line[3] %}
+                <li class="list-group-item p-3">{{line[2]}} {{out.end('билборд', line[2])}} на {{line[3]}}&#8381;</li>
             {% endfor %}
-        </tr>
-        {% for line in result %}
-        <tr>
-            {% for column in line %}
-            <td align="center"> {{column}}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </table> <br><br>
-    <a href={{url_for('bp_report.start_report')}}> Вернуться в меню отчетов</a>
+        </ul>
+        <div class="card-footer p-3"><b>Итого:</b> {{sum.amount}} {{out.end('билборд', sum.amount)}} на {{sum.cost}}&#8381;</div>
+    </div>
 {% endblock %}

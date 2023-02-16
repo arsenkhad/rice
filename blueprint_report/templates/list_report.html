@@ -1,0 +1,25 @@
+{% import 'output_template.html' as out %}
+
+{% extends 'base.html' %}
+{% block page %}
+<a class="btn ms-4 mt-2 d-none d-sm-block position-absolute start-0" href={{url_for('bp_report.start_report')}}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+    </svg>
+    Назад
+</a>
+<h1 class="pg-title display-6 mb-3">Доступные отчёты:</h1>
+<ul class="list-group mt-5 offset-lg-3 offset-md-2 col-lg-6 col-md-8">
+  {% for report in reports %}
+  <li class="list-group-item list-group-item-action p-0">
+    <form class="" method="post" action=''>
+      <input type="hidden" name="input_year" value={{report['rep_year']}}>
+      <input type="hidden" name="input_month" value={{report['rep_month']}}>
+      <button class="w-100 btn p-3" id="SubmitButton" type="submit">
+        <label for="SubmitButton" class="h5">Отчёт от {{out.month_end(report['rep_month'])}}-{{report['rep_year']}}</label>
+      </button>
+    </form>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

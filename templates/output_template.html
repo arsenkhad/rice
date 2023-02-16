@@ -1,0 +1,18 @@
+{% macro end(word, num, end1='ов') %}
+    {% if 1 < num%10 < 5 %}
+        {{word ~ 'а'}}
+    {% elif num%10 > 4 or num%10 == 0 or num%100//10 == 1 %}
+        {{word ~ end1}}
+    {% else %}
+        {{word}}
+    {% endif %}
+{% endmacro %}
+
+{%- macro month_end(num) -%}
+{%- if num < 10 -%}
+{{'0' ~ num}}
+{%- else -%}
+{{num}}
+{%- endif -%}
+{%- endmacro -%}
+

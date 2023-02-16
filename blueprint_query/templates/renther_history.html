@@ -29,10 +29,10 @@
         </div>
     </div>
     {% endif %}
-    <h1 class="pg-title mb-3">История заказов</h1>
+    <h1 class="pg-title display-6 mb-3">История заказов</h1>
     {% for order in orders%}
         <div class="container-fluid">
-            <h5 class="text-start mt-5">Заказ от {{order[1]}} на сумму {{order[2]}}:</h5>
+            <h4 class="text-start mt-5 mb-3">Заказ от {{order[1]}} на сумму {{order[2]}}:</h4>
             <div class="mb-4">
                 <div class="mx-md-5 m-2">
                     {{tmp.out_table(schema, lines[loop.index0])}}

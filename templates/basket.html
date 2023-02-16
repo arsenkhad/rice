@@ -1,10 +1,37 @@
-{% import 'basket_template.html' as tmp %}
+{% import 'output_template.html' as out %}
+
+{% macro render_b_item(item) %}
+<div class="card my-4 me-2 rounded">
+    <h6 class="card-header px-3">
+        <button type="button" class="btn btn-close position-absolute ms-2 p-1 start-0" data-bs-dismiss="modal" aria-label="Close"></button>
+        {{ item['b_adress'] }}
+    </h6>
+    <div class="card-body p-3 d-flex justify-content-between align-items-center">
+        <div class="">{{ item['b_cost'] }}₽/месяц</div>
+        <table>
+            <tr>
+                <td class="px-2">Начало:</td>
+                <td class="px-2 text-start">{{out.month_end(item['rent_start_month'])}}-{{item['rent_start_year']}}</td>
+            </tr>
+            <tr>
+                <td class="px-2">Конец:</td>
+                <td class="px-2 text-start">{{out.month_end((item['rent_start_month']+item['rent_len']-1)%12+1)}}-{{item['rent_start_year'] + (item['rent_start_month']+item['rent_len'])//12}}</td>
+            </tr>
+            <tr>
+                <td class="px-2">Длительность:</td>
+                <td class="text-start">{{item['rent_len']}} {{out.end('месяц', item['rent_len'], 'ев')}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
 {% set basket = session.get('basket', {}) %}
         <h3 class="mb-4">Ваша корзина</h3>
         {% if basket %}
-            <div>
+            <div style="overflow: auto; max-height: 50vh">
                 {% for key in basket %}
-                {{ tmp.render_b_item(basket[key]) }}
+                {{ render_b_item(basket[key]) }}
                 {% endfor %}
             </div>
         {% else %}
