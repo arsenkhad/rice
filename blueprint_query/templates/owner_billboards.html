@@ -1,0 +1,12 @@
+{% import 'query_template.html' as tmp %}
+{% extends 'base.html' %}
+{% block page %}
+    <div class="d-block">{{tmp.render_owner(owner, True)}}</div>
+
+    <h1 class="pg-title display-6 mt-5 mb-3">Билборды</h1>
+    <div class="container-fluid">
+        <div class="mx-md-5 mx-2 my-5">
+            {{tmp.out_table(schema, result)}}
+        </div>
+    </div>
+{% endblock %}

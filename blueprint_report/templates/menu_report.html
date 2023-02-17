@@ -3,6 +3,7 @@
     <h1 class="pg-title display-6 mb-3">Меню работы с отчетами</h1>
     <div class="container col-md-8">
     {% for report in report_list %}
+        {% if urls[loop.index0][0] or urls[loop.index0][1] %}
         <div class="card m-5">
             <h4 class="card-header">{{report['rep_name']}}</h4>
             <form class="card-body d-flex justify-content-end" action='' method = 'POST'>
@@ -15,6 +16,7 @@
                 <input type="hidden" name="rep_id" value={{report['rep_id']}}>
             </form>
         </div>
+        {% endif %}
     {% endfor %}
     </div>
     {% if error_message %}

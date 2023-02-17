@@ -17,11 +17,14 @@
     {{ nav_tab('Каталог', 'bp_order.order_index') }}
     {% if session %}
         {% if session.get('user_group', None) %}
+            {{ nav_tab('Отчёты', 'bp_report.start_report') }}
             {% if session.get('user_group', None) in ['admin', 'manager'] %}
-                {{ nav_tab('Отчёты', 'bp_report.start_report') }}
                 {{ nav_tab('Арендаторы', 'bp_query.renther_history_all') }}
             {% endif %}
-            {% if session.get('user_group', None) in ['admin', 'worker'] %}
+            {% if session.get('user_group', None) == 'admin' %}
+                {{ nav_tab('Владельцы', 'bp_query.bill_owners') }}
+            {% endif %}
+            {% if session.get('user_group', None) == 'worker' %}
                 {{ nav_tab('Расписание', 'bp_query.view_schedule') }}
             {% endif %}
         {% else %}

@@ -13,7 +13,18 @@ provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
 @blueprint_query.route('/bill_owners', methods=['GET', 'POST'])
 @group_required
 def bill_owners():
-    return render_template('log.html', message='Здесь будет список владельцев с их билбордами')
+    if request.method == 'GET':
+        _sql = provider.get('owner_all.sql')
+        owners, _ = select(current_app.config['db_config'], _sql)
+        return render_template('all_owners.html', owners=owners)
+    else:
+        _id = request.form.get('ow_id')
+        _sql = provider.get('owner_info.sql', input_id=_id)
+        owner, _ = select(current_app.config['db_config'], _sql)
+        _sql = provider.get('owner_bb.sql', input_id=_id)
+        billboards, schema = select(current_app.config['db_config'], _sql)
+        title = ['Адрес', 'Стоимость в месяц', 'Размер', 'Тип', 'Качество', 'Дата установки']
+        return render_template('owner_billboards.html', owner=owner[0], result=billboards, schema=title)
 
 
 @blueprint_query.route('/schedule', methods=['GET', 'POST'])
@@ -58,8 +69,8 @@ def get_orders(_id, errtxt, show=False):
             line, _ = select(current_app.config['db_config'], _sql)
             lines.append(line)
         info = get_renther(_id) if show else []
-        schema = ['Стоимость в месяц', 'Адрес билборда', 'Год начала аренды', 'Месяц начала аренды', 'Длительность аренды', 'Общая стоимость']
-        return render_template('renther_history.html', orders=orders, lines=lines, schema=schema, info=info)
+        title = ['Адрес билборда', 'Стоимость в месяц', 'Год начала аренды', 'Месяц начала аренды', 'Длительность аренды', 'Общая стоимость']
+        return render_template('renther_history.html', orders=orders, lines=lines, schema=title, info=info)
     return render_template('log.html', message=errtxt)
 
 

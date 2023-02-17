@@ -4,11 +4,13 @@
     "bp_query"
   ],
   "worker": [
+    "bp_report.start_report",
+    "bp_report.create_rep2",
     "bp_query.view_schedule"
   ],
   "manager": [
-    "bp_report.create_rep2",
     "bp_report.view_rep1",
+    "bp_report.view_rep2",
     "bp_report.start_report",
     "bp_query.renther_history_all"
   ],

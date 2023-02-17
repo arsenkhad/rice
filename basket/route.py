@@ -65,7 +65,7 @@ def save_order():
         if o_id:
             call_proc(current_app.config['db_config'], 'cost_update', int(o_id))
             session.pop('basket')
-            return render_template('order_created.html', order_id=o_id)
+            return render_template('log.html', message=f'Заказ №{o_id} успешно создан')
     else:
         return render_template('log.html', message='Что-то пошло не так')
 

@@ -41,11 +41,11 @@ def create_rep1():
     _sql = provider.get('date_orders.sql')
     dates = select_dict(current_app.config['db_config'], _sql)
     years = set([date['year'] for date in dates])
-    # months = set([date['month'] for date in dates])
+    months = set([date['month'] for date in dates])
     print(*years)
     # print(*months)
     if request.method == 'GET':
-        return render_template('report_create.html', dates=dates, years=years)
+        return render_template('report_create.html', dates=dates, years=years, months=months)
     else:
         input_year = request.form.get('input_year')
         input_month = request.form.get('input_month')
