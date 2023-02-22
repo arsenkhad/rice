@@ -1,36 +1,4 @@
-{% macro purchase(id, cost, notExt, modal=False) %}
-<div class="py-2 me-3 {% if not modal %} me-md-0 {% endif %}">{{ cost }}&#8381;/месяц</div>
-<div>
-    <div class="dropdown">
-        <button class="btn btn-success rounded-pill {% if notExt %} disabled {% endif %}" type="button" data-bs-toggle="dropdown">Добавить</button>
-        <div class="dropdown-menu dropdown-menu-end my-3 p-2">
-            <div class="d-inline-flex flex-column">
-                <table class="table table-borderless text-center mb-2">
-                    <thead>
-                        <tr class="table-bordered">
-                            <td class="text-disabled"> 2022 </td>
-                            <th> 2023 </th>
-                            <td class="text-secondary"> 2024 </td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr> <td>Jan</td> <td>Feb</td> <td>Mar</td> </tr>
-                        <tr> <td>Apr</td> <td>May</td> <td>June</td> </tr>
-                        <tr> <td>July</td> <td>Aug</td> <td>Sep</td> </tr>
-                        <tr> <td>Oct</td> <td>Nov</td> <td>Dec</td> </tr>
-                    </tbody>
-                </table>
-                <form class="ms-auto mb-2" action="" method="post">
-                    <input type="hidden" name="b_id" value="{{ id }}">
-                    <button class="btn btn-success rounded-pill {% if notExt %} disabled {% endif %}" type="submit" name="AddBaskt">Добавить</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-{% endmacro %}
-
-{% macro render_c_item(item, notExt=False) %}
+{% macro render_c_item(item, purchase=False) %}
     <div class="mt-5 col-lg-6 col-8 offset-2 offset-lg-0">
         <div class="card mb-3 rounded">
             <div class="row m-0">
@@ -46,10 +14,19 @@
                                 Характеристики
                             </a>
                         </div>
-
+                        {% if purchase %}
                         <div class="d-flex ms-auto me-md-2 d-md-block justify-content-end">
-                            {{ purchase(item['b_id'], item['b_cost'], notExt) }}
+                            <div class="py-2 me-3 me-md-0">{{ item['b_cost'] }}&#8381;/месяц</div>
+                            {% if purchase %}
+                            <div>
+                                <form class="ms-auto mb-2" action="" method="post">
+                                    <input type="hidden" name="b_id" value="{{ item['b_id'] }}">
+                                    <button class="btn btn-success rounded-pill" type="submit" name="AddBaskt">Добавить</button>
+                                </form>
+                            </div>
+                            {% endif %}
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -98,7 +75,15 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    {{ purchase(item['b_id'], item['b_cost'], notExt, True) }}
+                    <div class="py-2 me-3">{{item['b_cost'] }}&#8381;/месяц</div>
+                    {% if purchase %}
+                    <div>
+                        <form class="ms-auto mb-2" action="" method="post">
+                            <input type="hidden" name="b_id" value="{{ item['b_id'] }}">
+                            <button class="btn btn-success rounded-pill" type="submit" name="AddBaskt">Добавить</button>
+                        </form>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

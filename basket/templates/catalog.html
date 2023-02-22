@@ -1,14 +1,59 @@
 {% extends 'base.html' %}
 {% block page %}
-{% import 'catalog_template.html' as tmp %}
-{% if not session or session.get('user_group', None) %}
-    {% set notExt = True %}
-{% endif %}
+    {% import 'catalog_template.html' as tmp %}
+    {% import 'output_template.html' as out %}
+    {% if not session or session.get('user_group', None) %}
+        {% set notExt = True %}
+    {% endif %}
+
+    {% if not notExt %}
+        <div class="card m-5 d-flex">
+            <div class="card-body p-3">
+                {% if not purchase %}
+                    <h4 class="px-3 my-2"> Укажите период аренды </h4>
+                    <form action="" method="POST">
+                        <div class="d-flex justify-content-center flex-wrap my-3">
+                            <div class="mx-3">
+                                <label class="form-label" for="start_date">Дата начала аренды</label>
+                                <input type="date" class="form-control" id="start_date" name="start_date" required min="{{ today }}">
+                            </div>
+                            <div class="mx-3">
+                                <label class="form-label" for="rent_len">Длительность аренды</label>
+                                <input type="number" class="form-control" id="rent_len" name="rent_len" min="1" required>
+                            </div>
+                            <button type="submit" class="btn btn-outline-primary align-self-end mx-3">Отправить</button>
+                        </div>
+                    </form>
+                {% else %}
+                    <a class="btn ms-4 mt-1 d-none d-sm-block position-absolute start-0" href="{{url_for('bp_order.order_index')}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                        </svg>
+                        Назад
+                    </a>
+                    <h4 class="px-3 my-2"> Указанный период </h4>
+                    <table class="table table-borderless table-sm my-3 d-flex justify-content-center">
+                        <tbody class="text-start">
+                            <tr>
+                                <td class="text-end text-secondary">Начало:</td>
+                                <td>{{out.month_end(sdate.month)}}-{{sdate.year}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end text-secondary">Длительность:</td>
+                                <td>{{rlen}} {{out.end('месяц', rlen, 'ев')}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
     <h1 class="pg-title display-6 mb-3">Каталог билбордов</h1>
     <div class="m-0 p-0 row">
         {% if items %}
         {% for item in items %}
-            {{ tmp.render_c_item(item, notExt) }}
+            {{ tmp.render_c_item(item, purchase) }}
         {% endfor %}
         {% else %}
         <div class="col-md-8 offset-md-2 col px-4">
@@ -19,7 +64,6 @@
                 </svg>
                 <h3 class="my-0 mx-2">Нет доступных билбордов</h3>
                 </div>
-
             </div>
         </div>
         {% endif %}

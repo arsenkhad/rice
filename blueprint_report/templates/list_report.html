@@ -10,16 +10,16 @@
 </a>
 <h1 class="pg-title display-6 mb-3">Доступные отчёты:</h1>
 <ul class="list-group mt-5 offset-lg-3 offset-md-2 col-lg-6 col-md-8">
-  {% for report in reports %}
-  <li class="list-group-item list-group-item-action p-0">
-    <form class="" method="post" action=''>
-      <input type="hidden" name="input_year" value={{report['rep_year']}}>
-      <input type="hidden" name="input_month" value={{report['rep_month']}}>
-      <button class="w-100 btn p-3" id="SubmitButton" type="submit">
-        <label for="SubmitButton" class="h5">Отчёт от {{out.month_end(report['rep_month'])}}-{{report['rep_year']}}</label>
-      </button>
-    </form>
-  </li>
-  {% endfor %}
+    {% for report in reports %}
+    <li class="list-group-item list-group-item-action p-0">
+        <form method="post" action=''>
+            <input type="hidden" name="input_year" value={{report['rep_year']}}>
+            <input type="hidden" name="input_month" value={{report['rep_month']}}>
+            <button class="w-100 btn p-3" id="SubmitButton{{report['rep_year']}}-{{report['rep_month']}}" type="submit">
+                <label for="SubmitButton{{report['rep_year']}}-{{report['rep_month']}}" class="h5">Отчёт от {{out.month_end(report['rep_month'])}}-{{report['rep_year']}}</label>
+            </button>
+        </form>
+    </li>
+    {% endfor %}
 </ul>
 {% endblock %}

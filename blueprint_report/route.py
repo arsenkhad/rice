@@ -75,6 +75,7 @@ def view_rep1():
         dates = select_dict(current_app.config['db_config'], _sql)
         return render_template('list_report.html', reports=dates)
     else:
+        print('test')
         input_year = request.form.get('input_year')
         input_month = request.form.get('input_month')
         if input_year and input_month:
@@ -85,7 +86,6 @@ def view_rep1():
             else:
                 _sql = provider.get('rent_reports.sql', input_month=input_month, input_year=input_year)
                 report_result, schema = select(current_app.config['db_config'], _sql)
-
                 if len(report_result) == 0:
                     return render_template('log.html', message='Такого отчёта пока не существует.')
                 else:
@@ -104,24 +104,3 @@ def create_rep2():
 @group_required
 def view_rep2():
     return render_template('log.html', message='Что-то пошло не так')
-
-
-# @blueprint_report.route('/delete_rep/1', methods=['GET', 'POST'])
-# @group_required
-# def delete_rep1():
-#     if request.method == 'GET':
-#         return render_template('report_create.html')
-#     else:
-#         input_year = request.form.get('input_year')
-#         input_month = request.form.get('input_month')
-#         if input_year and input_month:
-#             _sql = provider.get('rent_reports.sql', input_year=input_year, input_month=input_month)
-#             info_result = select_dict(current_app.config['db_config'], _sql)
-#             if len(info_result) == 0:
-#                 return render_template('log.html', message='Отчёта на этот месяц еще нет')
-#             else:
-#                 _sql = provider.get('delete.sql', input_month=input_month, input_year=input_year)
-#                 insert(current_app.config['db_config'], _sql)
-#                 return render_template('log.html', message='Отчет удален')
-#         else:
-#             return render_template('report_create.html', message='Повторите ввод')

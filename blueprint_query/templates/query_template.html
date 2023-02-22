@@ -57,7 +57,7 @@
         <thead>
              <tr>
                 {% for column in schema%}
-                    <th  class="{% if loop.index0 in [2,3,4] %} d-none d-md-table-cell {% endif %}" scope="col">{{column}}</th>
+                    <th  class="{% if (column|length)>4 and loop.index0 in [2,3,4] %} d-none d-md-table-cell {% endif %}" scope="col">{{column}}</th>
                 {% endfor %}
             </tr>
         </thead>

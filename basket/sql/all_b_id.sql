@@ -1,0 +1,1 @@
+select b_id from billboards

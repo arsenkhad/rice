@@ -2,12 +2,15 @@ import os
 
 from flask import Blueprint, request, render_template, current_app, session
 from access import group_required, external_required
-from db_work import select
+from db_work import select, select_dict
 from sql_provider import SQLProvider
+from datetime import date
 
 blueprint_query = Blueprint('bp_query', __name__, template_folder='templates')
 
 provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
+
+title_bb = ['Адрес', 'Стоимость в месяц', 'Размер', 'Тип', 'Качество', 'Дата установки']
 
 
 @blueprint_query.route('/bill_owners', methods=['GET', 'POST'])
@@ -23,14 +26,27 @@ def bill_owners():
         owner, _ = select(current_app.config['db_config'], _sql)
         _sql = provider.get('owner_bb.sql', input_id=_id)
         billboards, schema = select(current_app.config['db_config'], _sql)
-        title = ['Адрес', 'Стоимость в месяц', 'Размер', 'Тип', 'Качество', 'Дата установки']
-        return render_template('owner_billboards.html', owner=owner[0], result=billboards, schema=title)
+        return render_template('owner_billboards.html', owner=owner[0], result=billboards, schema=title_bb)
 
 
 @blueprint_query.route('/schedule', methods=['GET', 'POST'])
 @group_required
 def view_schedule():
-    return render_template('log.html', message='Здесь будет расписание')
+    today = date.today()
+    _sql = provider.get('schedule.sql', input_year=today.year, input_month=today.month)
+    schedule, _ = select(current_app.config['db_config'], _sql)
+    _sql = provider.get('schedule_bb.sql')
+    bb, _ = select(current_app.config['db_config'], _sql)
+    bb = {line[-1]: line[:-1] for line in bb}
+    out_schedule = []
+    for line in schedule:
+        for i in range(line[2]):
+            out_schedule.append([line[0]+(line[1]+i-1) // 12, (line[1]+i-1) % 12 + 1, line[3]])
+    schedule = {year: {f'{date.today().replace(month=month):%B}': [line[-1] for line in schedule if line[0] == year and line[1] == month]
+                for month in sorted(list(set([line[1] for line in schedule if line[0] == year])))}
+                for year in sorted(list(set(line[0] for line in schedule)))}
+    print(schedule)
+    return render_template('schedule.html', schedule=schedule, schema=[title_bb[i] for i in [0, 3, 2]], bb=bb)
 
 
 @blueprint_query.route('/renther_orders', methods=['GET', 'POST'])

@@ -3,7 +3,7 @@ import os
 from flask import Blueprint, render_template, request, current_app, session, redirect, url_for
 from db_context_manager import DBContextManager
 from access import external_required
-from db_work import select_dict, insert, call_proc
+from db_work import select, select_dict, insert, call_proc
 from sql_provider import SQLProvider
 from datetime import date
 
@@ -16,38 +16,83 @@ provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
 def order_index():
     db_config = current_app.config['db_config']
     if request.method == 'GET':
+        if session and 'rent_period' in session:
+            session.pop('rent_period')
         sql = provider.get('all_items.sql')
         items = select_dict(db_config, sql)
-        basket_items = session.get('basket', {})
-        return render_template('catalog.html', items=items)
+        return render_template('catalog.html', items=items, today=date.today())
     else:
-        b_id = request.form['b_id']
-        sql = provider.get('all_items.sql')
-        items = select_dict(db_config, sql)
-        add_to_basket(b_id, items)
+        start_date = request.form.get('start_date')
+        rent_len = request.form.get('rent_len')
+        if start_date and rent_len:
+            session['rent_period'] = (start_date, rent_len)
+            return redirect(url_for('bp_order.purchase'))
         return redirect(url_for('bp_order.order_index'))
+
+
+@blueprint_order.route('/purchase', methods=['GET', 'POST'])
+def purchase():
+    if session and 'rent_period' in session:
+        start_date, rent_len = session['rent_period']
+        start_date = date(*map(int, start_date.split('-')))
+        start_date.replace(day=1)
+        rent_len = int(rent_len)
+        db_config = current_app.config['db_config']
+        sql = provider.get('all_items.sql')
+        all_items = select_dict(db_config, sql)
+        if request.method == 'GET':
+            available_items = available_bb(start_date, rent_len)
+            items = [item for item in all_items if item['b_id'] in available_items]
+            print(items)
+            return render_template('catalog.html', items=items, purchase=True, sdate=start_date, rlen=rent_len)
+        else:
+            b_id = request.form['b_id']
+            add_to_basket(b_id, all_items, start_date, rent_len)
+    return redirect(url_for('bp_order.order_index'))
+
+
+def available_bb(start_date, rent_len):
+    db_config = current_app.config['db_config']
+    _sql = provider.get('all_schedule.sql')
+    schedule, _ = select(db_config, _sql)
+    _sql = provider.get('all_b_id.sql')
+    bb, _ = select(db_config, _sql)
+
+    bb_list = set(line[0] for line in bb)
+    end_date = get_end_date(start_date.year, start_date.month, rent_len)
+
+    for line in schedule:
+        if line[3] in bb_list:
+            line_start = date(*line[:2], 1)
+            line_end = get_end_date(*line[:3])
+            if end_date >= line_start and start_date <= line_end:
+                bb_list.discard(line[3])
+    return list(bb_list)
+
+
+def get_end_date(start_year, start_month, rent_len):
+    end_month = (start_month + rent_len - 2) % 12 + 1
+    end_year = start_year + (start_month + rent_len - 2) // 12
+    return date(end_year, end_month, 1)
 
 
 # Добавить проверку на пересечение по месяцам
 # Переработать механизм добавления в корзину
-def add_to_basket(b_id: str, items: dict):
+def add_to_basket(b_id: str, items: dict, start_date, rent_len):
     item_description = [item for item in items if str(item['b_id']) == str(b_id)]
     item_description = item_description[0]
     curr_basket = session.get('basket', {})
 
-    if b_id in curr_basket:
-        curr_basket[b_id]['rent_len'] = curr_basket[b_id]['rent_len'] + 1
-    else:
-        curr_basket[b_id] = {
-            'b_id': item_description['b_id'],
-            'b_adress': item_description['b_adress'],
-            'b_cost': item_description['b_cost'],
-            'rent_start_month': date.today().month,
-            'rent_start_year': date.today().year,
-            'rent_len': 1
+    curr_basket[b_id] = {
+        'b_id': item_description['b_id'],
+        'b_adress': item_description['b_adress'],
+        'b_cost': item_description['b_cost'],
+        'rent_start_month': start_date.month,
+        'rent_start_year': start_date.year,
+        'rent_len': rent_len
         }
-        session['basket'] = curr_basket
-        session.permanent = True
+    session['basket'] = curr_basket
+    session.permanent = True
     return True
 
 
