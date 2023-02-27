@@ -3,6 +3,7 @@ from flask import render_template, request, Blueprint, redirect, url_for, curren
 from db_work import call_proc, select, select_dict, insert
 from sql_provider import SQLProvider
 from access import group_required
+from datetime import date as d
 
 blueprint_report = Blueprint('bp_report', __name__, template_folder='templates')
 provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
@@ -42,10 +43,10 @@ def create_rep1():
     dates = select_dict(current_app.config['db_config'], _sql)
     years = set([date['year'] for date in dates])
     months = set([date['month'] for date in dates])
+    months = {month: f'{d.today().replace(month=month):%B}' for month in months}
     print(*years)
-    # print(*months)
     if request.method == 'GET':
-        return render_template('report_create.html', dates=dates, years=years, months=months)
+        return render_template('report_create.html', years=years, months=months)
     else:
         input_year = request.form.get('input_year')
         input_month = request.form.get('input_month')
@@ -73,9 +74,10 @@ def view_rep1():
     if request.method == 'GET':
         _sql = provider.get('list_rep.sql')
         dates = select_dict(current_app.config['db_config'], _sql)
+        if not dates:
+            return render_template('log.html', message='Нет доступных отчётов')
         return render_template('list_report.html', reports=dates)
     else:
-        print('test')
         input_year = request.form.get('input_year')
         input_month = request.form.get('input_month')
         if input_year and input_month:
@@ -97,10 +99,24 @@ def view_rep1():
 @blueprint_report.route('/create_rep2', methods=['GET', 'POST'])
 @group_required
 def create_rep2():
-    return render_template('log.html', message='Что-то пошло не так')
+    _sql = provider.get('date_schedule.sql')
+    dates, _ = select(current_app.config['db_config'], _sql)
+
+    return render_template('report_create.html', message='Что-то пошло не так')
 
 
 @blueprint_report.route('/view_rep2', methods=['GET', 'POST'])
 @group_required
 def view_rep2():
-    return render_template('log.html', message='Что-то пошло не так')
+    if request.method == 'GET':
+        _sql = provider.get('list_rep2.sql')
+        dates = select_dict(current_app.config['db_config'], _sql)
+        if not dates:
+            return render_template('log.html', message='Нет доступных отчётов')
+        return render_template('list_report.html', reports=dates, yearonly=True)
+    else:
+        input_year = request.form.get('input_year')
+        if input_year:
+            return render_template('log.html', message='Всё пошло так')
+        else:
+            return render_template('log.html', message='Что-то пошло не так')

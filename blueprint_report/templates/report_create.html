@@ -19,15 +19,17 @@
                         {% endfor %}
                     </select>
                 </div>
+                {% if not yearonly %}
                 <div class="mt-3">
                     <label class="form-label me-3" for="input_month">Месяц:</label>
                     <select class="form-select" name="input_month" id="input_month" required>
                         <option class="text-secondary disabled" disabled selected value="">Выберите месяц</option>
                         {% for month in months %}
-                        <option value="{{month}}">{{month}}</option>
+                        <option value="{{month}}">{{months[month]}}</option>
                         {% endfor %}
                     </select>
                 </div>
+                {% endif %}
             </div>
             <button type="submit" class="btn btn-outline-primary d-flex mt-4 me-3 ms-auto">Отправить</button>
         </form>

@@ -1,0 +1,1 @@
+select s_syear, s_smonth, s_len from schedule

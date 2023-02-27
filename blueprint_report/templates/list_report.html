@@ -14,10 +14,16 @@
     <li class="list-group-item list-group-item-action p-0">
         <form method="post" action=''>
             <input type="hidden" name="input_year" value={{report['rep_year']}}>
+            {% if yearonly %}
+            <button class="w-100 btn p-3" id="SubmitButton{{report['rep_year']}}" type="submit">
+                <label for="SubmitButton{{report['rep_year']}}" class="h5">Отчёт от {{report['rep_year']}}</label>
+            </button>
+            {% else %}
             <input type="hidden" name="input_month" value={{report['rep_month']}}>
             <button class="w-100 btn p-3" id="SubmitButton{{report['rep_year']}}-{{report['rep_month']}}" type="submit">
                 <label for="SubmitButton{{report['rep_year']}}-{{report['rep_month']}}" class="h5">Отчёт от {{out.month_end(report['rep_month'])}}-{{report['rep_year']}}</label>
             </button>
+            {% endif %}
         </form>
     </li>
     {% endfor %}
