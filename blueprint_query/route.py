@@ -42,9 +42,9 @@ def view_schedule():
     for line in schedule:
         for i in range(line[2]):
             out_schedule.append([line[0]+(line[1]+i-1) // 12, (line[1]+i-1) % 12 + 1, line[3]])
-    schedule = {year: {f'{date.today().replace(month=month):%B}': [line[-1] for line in schedule if line[0] == year and line[1] == month]
-                for month in sorted(list(set([line[1] for line in schedule if line[0] == year])))}
-                for year in sorted(list(set(line[0] for line in schedule)))}
+    schedule = {year: {f'{date.today().replace(month=month):%B}': [line[-1] for line in out_schedule if line[0] == year and line[1] == month]
+                for month in sorted(list(set([line[1] for line in out_schedule if line[0] == year])))}
+                for year in sorted(list(set(line[0] for line in out_schedule)))}
     print(schedule)
     return render_template('schedule.html', schedule=schedule, schema=[title_bb[i] for i in [0, 3, 2]], bb=bb)
 
