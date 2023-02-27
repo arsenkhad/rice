@@ -19,27 +19,27 @@ app.config['report_url'] = json.load(open('data_files/report_url.json'))
 app.config['report_list'] = json.load(open('data_files/report_list.json', encoding='UTF-8'))
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def main_page():
     return render_template('index.html')
 
 
-@app.route('/about',  methods=['GET', 'POST'])
+@app.route('/about')
 def about():
     return render_template('company.html')
 
 
-@app.route('/profile',  methods=['GET', 'POST'])
+@app.route('/profile')
 @login_required
 def profile():
     return render_template('profile.html')
 
 
-@app.route('/log_out', methods=['GET', 'POST'])
+@app.route('/log_out')
 def log_out():
     session.clear()
     return redirect(request.referrer)
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8000)
+    app.run(host='0.0.0.0', port=8000)

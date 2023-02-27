@@ -29,7 +29,7 @@ def bill_owners():
         return render_template('owner_billboards.html', owner=owner[0], result=billboards, schema=title_bb)
 
 
-@blueprint_query.route('/schedule', methods=['GET', 'POST'])
+@blueprint_query.route('/schedule')
 @group_required
 def view_schedule():
     today = date.today()
@@ -61,7 +61,7 @@ def renther_history_all():
         return get_orders(_id, 'Нет заказов', show=True)
 
 
-@blueprint_query.route('/renther_history', methods=['GET', 'POST'])
+@blueprint_query.route('/renther_history')
 @external_required
 def renther_history():
     _sql = provider.get('get_contract.sql', input_user=session['user_id'])
@@ -78,16 +78,14 @@ def renther_history():
 def get_orders(_id, errtxt, show=False):
     _sql = provider.get('renther_orders.sql', input_contract=_id)
     orders, _ = select(current_app.config['db_config'], _sql)
+    info = get_renther(_id) if show else []
     lines = []
-    if len(orders):
-        for order in orders:
-            _sql = provider.get('renther_bb.sql', input_id=order[0])
-            line, _ = select(current_app.config['db_config'], _sql)
-            lines.append(line)
-        info = get_renther(_id) if show else []
-        title = ['Адрес билборда', 'Стоимость в месяц', 'Год начала аренды', 'Месяц начала аренды', 'Длительность аренды', 'Общая стоимость']
-        return render_template('renther_history.html', orders=orders, lines=lines, schema=title, info=info)
-    return render_template('log.html', message=errtxt)
+    for order in orders:
+        _sql = provider.get('renther_bb.sql', input_id=order[0])
+        line, _ = select(current_app.config['db_config'], _sql)
+        lines.append(line)
+    title = ['Адрес билборда', 'Стоимость в месяц', 'Год начала аренды', 'Месяц начала аренды', 'Длительность аренды', 'Общая стоимость']
+    return render_template('renther_history.html', orders=orders, lines=lines, schema=title, info=info, message=errtxt)
 
 
 def get_renther(_id):

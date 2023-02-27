@@ -24,6 +24,7 @@ def start_auth():
                 user_dict = user_info[0]
                 session['user_id'] = user_dict['user_id']
                 session['user_group'] = user_dict['user_group']
+                session['login'] = login
                 session.permanent = True
                 return redirect(url_for('main_page'))
             else:

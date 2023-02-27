@@ -9,18 +9,24 @@
     </a>
     <h1 class="pg-title display-6 mb-3">
         {% if result[0][-1] %}Временный о{% else %}О{% endif %}тчёт
-        от {{out.month_end(result[0][0])}}-{{result[0][1]}}:
+        от {{result[0][0]}}г:
     </h1>
     <div class="card mt-5 offset-lg-3 offset-md-2 col-lg-6 col-md-8 text-start">
-        <h4 class="card-header p-3">Заказы:</h4>
+        <h4 class="card-header p-3">Занятость билбордов:</h4>
         <ul class="card-body p-0 list-group list-group-flush">
-            {% set sum = namespace(amount = 0, cost = 0) %}
+            {% set sum = namespace(busy = 0, total = 0) %}
             {% for line in result %}
-                {% set sum.amount = sum.amount + line[2] %}
-                {% set sum.cost = sum.cost + line[3] %}
-                <li class="list-group-item p-3">{{line[2]}} {{out.end('билборд', line[2])}} на {{line[3]}}&#8381;</li>
+                {% set sum.busy = sum.busy + line[-2] %}
+                {% set sum.total = sum.total + 12 %}
+                <li class="list-group-item d-flex justify-content-between p-3">
+                    <i class="ms-md-3">{{line[1]}}:</i>
+                    <div class="me-md-3">{{line[-2]}}/12 месяцев</div>
+                </li>
             {% endfor %}
         </ul>
-        <div class="card-footer p-3"><b>Итого:</b> {{sum.amount}} {{out.end('билборд', sum.amount)}} на {{sum.cost}}&#8381;</div>
+        <div class="card-footer d-flex justify-content-between p-3">
+            <b class="ms-md-3">Общая занятость:</b>
+            <div class="me-md-3">{{sum.busy}}/{{sum.total}} месяцев</div>
+        </div>
     </div>
 {% endblock %}

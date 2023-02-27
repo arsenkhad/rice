@@ -30,7 +30,7 @@ def order_index():
         return redirect(url_for('bp_order.order_index'))
 
 
-@blueprint_order.route('/purchase', methods=['GET', 'POST'])
+@blueprint_order.route('/purchase')
 def purchase():
     if session and 'rent_period' in session:
         start_date, rent_len = session['rent_period']
@@ -96,7 +96,7 @@ def add_to_basket(b_id: str, items: dict, start_date, rent_len):
     return True
 
 
-@blueprint_order.route('/save_order', methods=['GET', 'POST'])
+@blueprint_order.route('/save_order')
 @external_required
 def save_order():
     user_id = session.get('user_id')

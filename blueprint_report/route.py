@@ -1,6 +1,7 @@
 import os
 from flask import render_template, request, Blueprint, redirect, url_for, current_app, session
-from db_work import call_proc, select, select_dict, insert
+from db_work import call_proc, select, select_dict
+from basket.route import get_end_date
 from sql_provider import SQLProvider
 from access import group_required
 from datetime import date as d
@@ -38,15 +39,15 @@ def start_report():
 
 @blueprint_report.route('/create_rep1', methods=['GET', 'POST'])
 @group_required
-def create_rep1():
-    _sql = provider.get('date_orders.sql')
-    dates = select_dict(current_app.config['db_config'], _sql)
-    years = set([date['year'] for date in dates])
-    months = set([date['month'] for date in dates])
-    months = {month: f'{d.today().replace(month=month):%B}' for month in months}
-    print(*years)
+def create_rep1(message=None):
     if request.method == 'GET':
-        return render_template('report_create.html', years=years, months=months)
+        _sql = provider.get('date_orders.sql')
+        dates = select_dict(current_app.config['db_config'], _sql)
+        years = set([date['year'] for date in dates])
+        months = set([date['month'] for date in dates])
+        months = {month: f'{d.today().replace(month=month):%B}' for month in months}
+        print(*years)
+        return render_template('report_create.html', years=years, months=months, message=message)
     else:
         input_year = request.form.get('input_year')
         input_month = request.form.get('input_month')
@@ -65,7 +66,7 @@ def create_rep1():
                     print('res = ', res)
                     return render_template('log.html', message='Отчет создан')
         else:
-            return render_template('report_create.html', dates=dates, years=years, months=months, message='Повторите ввод')
+            return redirect(url_for('bp_report.create_rep1', message='Повторите ввод'))
 
 
 @blueprint_report.route('/view_rep1', methods=['GET', 'POST'])
@@ -87,7 +88,7 @@ def view_rep1():
                 return render_template('log.html', message='Продаж в этом месяце не было')
             else:
                 _sql = provider.get('rent_reports.sql', input_month=input_month, input_year=input_year)
-                report_result, schema = select(current_app.config['db_config'], _sql)
+                report_result, _ = select(current_app.config['db_config'], _sql)
                 if len(report_result) == 0:
                     return render_template('log.html', message='Такого отчёта пока не существует.')
                 else:
@@ -98,11 +99,29 @@ def view_rep1():
 
 @blueprint_report.route('/create_rep2', methods=['GET', 'POST'])
 @group_required
-def create_rep2():
-    _sql = provider.get('date_schedule.sql')
-    dates, _ = select(current_app.config['db_config'], _sql)
-
-    return render_template('report_create.html', message='Что-то пошло не так')
+def create_rep2(message=None):
+    if request.method == 'GET':
+        _sql = provider.get('date_schedule.sql')
+        dates, _ = select(current_app.config['db_config'], _sql)
+        years = set()
+        [years.add(*range(date[0], get_end_date(*date).year + 1)) for date in dates]
+        return render_template('report_create.html', years=years, message=message)
+    else:
+        input_year = request.form.get('input_year')
+        if input_year:
+            if False:
+                return render_template('log.html', message='В этом году все билборды были свободны')
+            else:
+                _sql = provider.get('busy_reports.sql', input_year=input_year)
+                report_result = select_dict(current_app.config['db_config'], _sql)
+                if len(report_result) != 0 and report_result[0]['temp'] == 0:
+                    return render_template('log.html', message='Отчет уже существует')
+                else:
+                    res = call_proc(current_app.config['db_config'], 'report_busy', int(input_year))
+                    print('res = ', res)
+                    return render_template('log.html', message='Отчет создан')
+        else:
+            return redirect(url_for('bp_report.create_rep2', message='Повторите ввод'))
 
 
 @blueprint_report.route('/view_rep2', methods=['GET', 'POST'])
@@ -110,13 +129,21 @@ def create_rep2():
 def view_rep2():
     if request.method == 'GET':
         _sql = provider.get('list_rep2.sql')
-        dates = select_dict(current_app.config['db_config'], _sql)
-        if not dates:
+        years = select_dict(current_app.config['db_config'], _sql)
+        if not years:
             return render_template('log.html', message='Нет доступных отчётов')
-        return render_template('list_report.html', reports=dates, yearonly=True)
+        return render_template('list_report.html', reports=years, yearonly=True)
     else:
         input_year = request.form.get('input_year')
         if input_year:
-            return render_template('log.html', message='Всё пошло так')
+            if False:
+                return render_template('log.html', message='Продаж в этом месяце не было')
+            else:
+                _sql = provider.get('busy_reports.sql', input_year=input_year)
+                report_result, _ = select(current_app.config['db_config'], _sql)
+                if len(report_result) == 0:
+                    return render_template('log.html', message='Такого отчёта пока не существует.')
+                else:
+                    return render_template('result_2.html', result=report_result)
         else:
             return render_template('log.html', message='Что-то пошло не так')
