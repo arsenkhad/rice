@@ -1,7 +1,7 @@
 from flask import Flask, url_for, render_template, request, json, session, redirect
 from auth.route import blueprint_auth
 from basket.route import blueprint_order
-from blueprint_query.route import blueprint_query
+from blueprint_query.route import blueprint_query, get_renther
 from blueprint_report.route import blueprint_report
 from access import login_required
 
@@ -32,7 +32,10 @@ def about():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html')
+    group = session.get('user_group', None)
+    info = None if group else get_renther()
+    print(info)
+    return render_template('profile.html', login=session['login'], info=info, group=group)
 
 
 @app.route('/log_out')

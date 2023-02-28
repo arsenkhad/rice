@@ -25,7 +25,7 @@ def bill_owners():
         _sql = provider.get('owner_info.sql', input_id=_id)
         owner, _ = select(current_app.config['db_config'], _sql)
         _sql = provider.get('owner_bb.sql', input_id=_id)
-        billboards, schema = select(current_app.config['db_config'], _sql)
+        billboards, _ = select(current_app.config['db_config'], _sql)
         return render_template('owner_billboards.html', owner=owner[0], result=billboards, schema=title_bb)
 
 
@@ -88,7 +88,10 @@ def get_orders(_id, errtxt, show=False):
     return render_template('renther_history.html', orders=orders, lines=lines, schema=title, info=info, message=errtxt)
 
 
-def get_renther(_id):
+def get_renther(_id=None):
+    if not _id:
+        _sql = provider.get('get_contract.sql', input_user=session['user_id'])
+        _id = select(current_app.config['db_config'], _sql)[0][0][0]
     _sql = provider.get('renther_info.sql', input_id=_id)
     r_data, r_head = select(current_app.config['db_config'], _sql)
     r_info = dict(zip(r_head, *r_data))

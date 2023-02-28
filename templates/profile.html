@@ -1,6 +1,33 @@
+{% import 'output_template.html' as out %}
+
 {% extends 'base.html' %}
 {% block page %}
-        <h1 class="pg-title display-6 mb-3">Твой профиль</h1>
-        <div>Логин: какой указал лол</div>
-        <div>Имя: прочитай в паспорте</div>
+        <h1 class="pg-title display-6 mb-3">Профиль</h1>
+        <div class="card col-md-8 col-sm-10 offset-md-2 offset-sm-1 mt-4">
+                <div class="card-body text-start py-4 px-5">
+                        <div class="card-title display-3 mb-2">{{login}}</div>
+                        {% if info %}
+                            <div class="card-title display-6 mb-2">{{info['r_name']}}</div>
+                            <div class="card-title">Контракт &numero;<b>{{info['contract_num']}}</b> от {{info['contract_date']}}</div>
+                            <div class="card-text">Адрес: {{info['r_adress']}}</div>
+                            <div class="card-text">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-outbound-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511zM11 .5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V1.707l-4.146 4.147a.5.5 0 0 1-.708-.708L14.293 1H11.5a.5.5 0 0 1-.5-.5z"/>
+                                </svg>
+                                <a href="tel:+7{{info['r_phone']}}">{{out.phone(info['r_phone'] | string)}}</a>
+                            </div>
+                        {% else %}
+                            <div class="">Роль: {{group}}</div>
+                        {% endif %}
+                </div>
+                <div class="card-footer text-end p-3">
+                        <a href="/log_out" class="btn btn-outline-primary px-3 py-2 rounded me-2 d-inline-flex align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="24" fill="currentColor" class="bi m-1 bi-box-arrow-right" viewBox="0 0 16 16" preserveAspectRatio="none">
+                                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                            </svg>
+                            <div class="ms-1">Выйти</div>
+                        </a>
+                </div>
+        </div>
 {% endblock %}

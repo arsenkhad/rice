@@ -16,3 +16,6 @@
 {%- endif -%}
 {%- endmacro -%}
 
+{% macro phone(num) %}
+    {{''.join(['+7 (', num[:3], ') ', num[3:6], '-', num[6:8], '-', num[8:]])}}
+{% endmacro %}
