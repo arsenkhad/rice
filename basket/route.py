@@ -14,6 +14,7 @@ provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
 
 @blueprint_order.route('/', methods=['GET', 'POST'])
 def order_index():
+    print(session.get('basket', {}))
     db_config = current_app.config['db_config']
     if request.method == 'GET':
         sql = provider.get('all_items.sql')
@@ -102,7 +103,8 @@ def save_order():
     if session.get('basket', {}):
         current_basket = session.get('basket', {})
         sql = provider.get('get_contract.sql', user_id=user_id)
-        contract_num = insert(current_app.config['db_config'], sql)
+        contract_num, _ = select(current_app.config['db_config'], sql)
+        contract_num = contract_num[0][0]
         print(user_id, contract_num)
         o_id = save_order_with_list(current_app.config['db_config'], contract_num, current_basket)
         print(current_basket)

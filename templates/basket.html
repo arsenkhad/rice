@@ -27,17 +27,24 @@
 {% endmacro %}
 
 {% set basket = session.get('basket', {}) %}
+{% set total = namespace(sum = 0) %}
 <h3 class="mb-4">Ваша корзина</h3>
 {% if basket %}
     <div style="overflow: auto; max-height: 50vh">
         {% for key in basket %}
         {{ render_b_item(basket[key]) }}
+        {% set total.sum = total.sum + basket[key]['b_cost']*basket[key]['rent_len'] %}
         {% endfor %}
     </div>
 {% else %}
     <div>Ваша корзина пуста</div>
 {% endif %}
-<div class="d-flex justify-content-between mt-4">
+<div class="d-flex justify-content-between align-items-end mt-4">
     <a class="btn btn-outline-primary mx-2 {% if not basket %} invisible {% endif %}" href="{{url_for('bp_order.clear_basket')}}">Очистить корзину</a>
-    <a class="btn btn-primary mx-2 {% if not basket %} disabled {% endif %}" href="{{url_for('bp_order.save_order')}}"> Оформить заказ</a>
+    <div class="mx-2">
+        {% if total.sum %}
+        <h5 class="mb-3 me-2">Итого: {{total.sum}}₽</h5>
+        {% endif %}
+        <a class="btn btn-primary {% if not basket %} disabled {% endif %}" href="{{url_for('bp_order.save_order')}}"> Оформить заказ</a>
+    </div>
 </div>

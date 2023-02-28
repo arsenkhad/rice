@@ -149,5 +149,5 @@ def get_years():
     _sql = provider.get('date_schedule.sql')
     dates, _ = select(current_app.config['db_config'], _sql)
     years = set()
-    [years.add(*range(date[0], get_end_date(*date).year + 1)) for date in dates]
+    [[years.add(year) for year in range(date[0], get_end_date(*date).year + 1)] for date in dates]
     return years
