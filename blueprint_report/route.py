@@ -101,15 +101,11 @@ def view_rep1():
 @group_required
 def create_rep2(message=None):
     if request.method == 'GET':
-        _sql = provider.get('date_schedule.sql')
-        dates, _ = select(current_app.config['db_config'], _sql)
-        years = set()
-        [years.add(*range(date[0], get_end_date(*date).year + 1)) for date in dates]
-        return render_template('report_create.html', years=years, message=message)
+        return render_template('report_create.html', years=get_years(), message=message)
     else:
         input_year = request.form.get('input_year')
         if input_year:
-            if False:
+            if not get_years():
                 return render_template('log.html', message='В этом году все билборды были свободны')
             else:
                 _sql = provider.get('busy_reports.sql', input_year=input_year)
@@ -136,7 +132,7 @@ def view_rep2():
     else:
         input_year = request.form.get('input_year')
         if input_year:
-            if False:
+            if not get_years():
                 return render_template('log.html', message='Продаж в этом месяце не было')
             else:
                 _sql = provider.get('busy_reports.sql', input_year=input_year)
@@ -147,3 +143,11 @@ def view_rep2():
                     return render_template('result_2.html', result=report_result)
         else:
             return render_template('log.html', message='Что-то пошло не так')
+
+
+def get_years():
+    _sql = provider.get('date_schedule.sql')
+    dates, _ = select(current_app.config['db_config'], _sql)
+    years = set()
+    [years.add(*range(date[0], get_end_date(*date).year + 1)) for date in dates]
+    return years

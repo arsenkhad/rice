@@ -16,8 +16,6 @@ provider = SQLProvider(os.path.join(os.path.dirname(__file__), 'sql'))
 def order_index():
     db_config = current_app.config['db_config']
     if request.method == 'GET':
-        if session and 'rent_period' in session:
-            session.pop('rent_period')
         sql = provider.get('all_items.sql')
         items = select_dict(db_config, sql)
         return render_template('catalog.html', items=items, today=date.today())
@@ -25,15 +23,16 @@ def order_index():
         start_date = request.form.get('start_date')
         rent_len = request.form.get('rent_len')
         if start_date and rent_len:
-            session['rent_period'] = (start_date, rent_len)
-            return redirect(url_for('bp_order.purchase'))
+            return redirect(url_for('.purchase', start_date=start_date, rent_len=rent_len))
         return redirect(url_for('bp_order.order_index'))
 
 
-@blueprint_order.route('/purchase')
+@blueprint_order.route('/purchase', methods=['GET', 'POST'])
 def purchase():
-    if session and 'rent_period' in session:
-        start_date, rent_len = session['rent_period']
+    start_date = request.args.get('start_date')
+    rent_len = request.args.get('rent_len')
+    print(start_date, rent_len)
+    if start_date and rent_len:
         start_date = date(*map(int, start_date.split('-')))
         start_date.replace(day=1)
         rent_len = int(rent_len)
