@@ -21,7 +21,8 @@ app.config['report_list'] = json.load(open('data_files/report_list.json', encodi
 
 @app.route('/')
 def main_page():
-    return render_template('index.html')
+    return redirect(url_for('bp_order.order_index'))
+    # return render_template('index.html')
 
 
 @app.route('/about')
